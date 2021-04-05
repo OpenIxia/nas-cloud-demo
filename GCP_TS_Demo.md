@@ -65,7 +65,7 @@ In this iteration of the demo, a combination of the following security monitorin
 
 4. Copy the 32-character value of ````OrganizationID```` string from the line above and paste it to the script below on the line ````organizationID```` right after the ````=```` sign. Deploy a Threat Simulator Agent instance on GCP by running the following command in GCP Console.
 
-[//]: # (TODO consider making the name of the agent to reflect the instance name.)
+[//]: # (TODO consider making the name of the agent to reflect the instance name.)  
 
 [//]: # (gcloud beta compute instances create ts-workload-1 \)
 		gcloud compute instances create ts-workload-1 \
