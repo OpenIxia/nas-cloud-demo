@@ -40,7 +40,7 @@ gcloud compute networks subnets create ts-demo-app-subnet --project=kt-nas-demo 
 gcloud compute networks subnets create ts-demo-ids-subnet --project=kt-nas-demo --range=192.168.202.0/24 --network=ts-demo-vpc --region=us-west1
 ```
 
-For successful PAN deployment, we need another VPC to be on "trusted" security zone side on the PAN instance. It will not be used in any other way.
+  For successful PAN deployment, we need another VPC to be on "trusted" security zone side on the PAN instance. It will not be used in any other way.
 
 ```
 Name: ts-pan-trust-vpc
