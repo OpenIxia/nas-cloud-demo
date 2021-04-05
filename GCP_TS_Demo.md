@@ -374,10 +374,10 @@ In this iteration of the demo, a combination of the following security monitorin
 ### Permit SSH via Browser
 Default VPC
 
-		gcloud compute --project=kt-nas-demo firewall-rules create bortok-allow-ssh-from-browser --description="https://cloud.google.com/iap/docs/using-tcp-forwarding" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:22 --source-ranges=35.235.240.0/20
+	gcloud compute --project=kt-nas-demo firewall-rules create bortok-allow-ssh-from-browser --description="https://cloud.google.com/iap/docs/using-tcp-forwarding" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:22 --source-ranges=35.235.240.0/20
 
 ts-demo-vpc VPC
 
-		gcloud compute --project=kt-nas-demo firewall-rules create bortok-allow-ssh-from-browser-ts-demo-vpc --description="https://cloud.google.com/iap/docs/using-tcp-forwarding" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=tcp:22 --source-ranges=35.235.240.0/20
+	gcloud compute --project=kt-nas-demo firewall-rules create bortok-allow-ssh-from-browser-ts-demo-vpc --description="https://cloud.google.com/iap/docs/using-tcp-forwarding" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=tcp:22 --source-ranges=35.235.240.0/20
 
 
