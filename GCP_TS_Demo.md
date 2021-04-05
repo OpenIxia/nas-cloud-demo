@@ -132,9 +132,9 @@ In this iteration of the demo, a combination of the following security monitorin
 		--reservation-affinity=any \
 		--tags=splunk-server
 
-2. Open SSH session and download Splunk Enterprise Deb package
-
 [//]: # (TODO save with a proper name to avoid mv)
+
+2. Open SSH session and download Splunk Enterprise Deb package
 
 		wget "https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.1.3&product=splunk&filename=splunk-8.1.3-63079c59e632-linux-2.6-amd64.deb&wget=true"
 		mv DownloadActivityServlet\?architecture\=x86_64\&platform\=linux\&version\=8.1.3\&product\=splunk\&filename\=splunk-8.1.3-63079c59e632-linux-2.6-amd64.deb\&wget\=true splunk-8.1.3-63079c59e632-linux-2.6-amd64.deb
@@ -156,9 +156,9 @@ In this iteration of the demo, a combination of the following security monitorin
 		# ---
 		sudo /opt/splunk/bin/splunk restart
 
-5. Configure NTP for time syncronization on Splunk instance
-
 [//]: # (TODO check if chronyd is on by default - if so, than ntp is not needed)
+
+5. Configure NTP for time syncronization on Splunk instance
 
 		sudo apt update
 		sudo apt install ntp -y
