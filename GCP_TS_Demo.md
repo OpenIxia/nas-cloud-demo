@@ -68,25 +68,26 @@ In this iteration of the demo, a combination of the following security monitorin
 [//]: # (TODO consider making the name of the agent to reflect the instance name.)  
 
 [//]: # (gcloud beta compute instances create ts-workload-1 \)
-		gcloud compute instances create ts-workload-1 \
 [//]: # (		--project=kt-nas-demo \)
-		--zone=us-west1-b \
-		--machine-type=e2-small \
-		--subnet=ts-demo-app-subnet \
 [//]: # (--network-tier=PREMIUM \)
 [//]: # (--maintenance-policy=MIGRATE \)
 [//]: # (--reservation-affinity=any \)
 [//]: # (--service-account=461244098184-compute@developer.gserviceaccount.com \)
 [//]: # (--scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append \)
 [//]: # (--image=ubuntu-2004-focal-v20210315 \)
-		--image-family=ubuntu-2004-lts \
-		--image-project=ubuntu-os-cloud \
-		--boot-disk-size=10GB \
 [//]: # (--boot-disk-type=pd-balanced \)
-		--boot-disk-device-name=ts-workload-1 \
 [//]: # (--no-shielded-secure-boot \)
 [//]: # (--shielded-vtpm \)
 [//]: # (--shielded-integrity-monitoring \)
+
+		gcloud compute instances create ts-workload-1 \
+		--zone=us-west1-b \
+		--machine-type=e2-small \
+		--subnet=ts-demo-app-subnet \
+		--image-family=ubuntu-2004-lts \
+		--image-project=ubuntu-os-cloud \
+		--boot-disk-size=10GB \
+		--boot-disk-device-name=ts-workload-1 \
 		--tags=ts-agent,http-server,https-server \
 		--metadata=startup-script='#!/bin/bash -xe
 		if [ ! -f /home/threatsim/.tsinstalled ]; then
