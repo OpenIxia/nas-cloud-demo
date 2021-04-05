@@ -22,15 +22,15 @@ In this iteration of the demo, a combination of the following security monitorin
 
 1. Create a demo VPC for Threat Simulator agent and IDS deployment. If needed, change IP address ranges to fit your design.
 
-		Name: ts-demo-vpc
-		Description: ThreatSim Demo
-		Subnets: custom
-			Name: ts-demo-app-subnet
-				Region: us-west1
-				IP address range: 192.168.201.0/24
-			Name: ts-demo-ids-subnet
-				Region: us-west1
-				IP address range: 192.168.202.0/24
+    Name: ts-demo-vpc
+    Description: ThreatSim Demo
+    Subnets: custom
+      Name: ts-demo-app-subnet
+      Region: us-west1
+        IP address range: 192.168.201.0/24
+      Name: ts-demo-ids-subnet
+      Region: us-west1
+        IP address range: 192.168.202.0/24
 
 		gcloud compute networks create ts-demo-vpc --project=kt-nas-demo --description="ThreatSim Demo" --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional
 		gcloud compute networks subnets create ts-demo-app-subnet --project=kt-nas-demo --range=192.168.201.0/24 --network=ts-demo-vpc --region=us-west1
