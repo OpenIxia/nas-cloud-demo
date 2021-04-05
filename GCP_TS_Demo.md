@@ -156,8 +156,9 @@ In this iteration of the demo, a combination of the following security monitorin
 		# ---
 		sudo /opt/splunk/bin/splunk restart
 
-5. Configure NTP for time syncronization on Splunk instance 
-[//]: # (TODO check if chronyd is on by default - if so, than ntp is not needed)  
+5. Configure NTP for time syncronization on Splunk instance
+
+[//]: # (TODO check if chronyd is on by default - if so, than ntp is not needed)
 
 		sudo apt update
 		sudo apt install ntp -y
