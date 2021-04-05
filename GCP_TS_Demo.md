@@ -40,18 +40,21 @@ gcloud compute networks subnets create ts-demo-app-subnet --project=kt-nas-demo 
 gcloud compute networks subnets create ts-demo-ids-subnet --project=kt-nas-demo --range=192.168.202.0/24 --network=ts-demo-vpc --region=us-west1
 ```
 
-	For successful PAN deployment, we need another VPC to be on "trusted" security zone side on the PAN instance. It will not be used in any other way.
+For successful PAN deployment, we need another VPC to be on "trusted" security zone side on the PAN instance. It will not be used in any other way.
 
-		Name: ts-pan-trust-vpc
-		Description: ThreatSim Demo - Palo Alto Trusted NIC VPC
-		Subnets: custom
-			Name: ts-pan-trust-subnet
-				Region: us-west1
-				IP address range: 192.168.203.0/24
-			
+```
+Name: ts-pan-trust-vpc
+Description: ThreatSim Demo - Palo Alto Trusted NIC VPC
+Subnets: custom
+	Name: ts-pan-trust-subnet
+		Region: us-west1
+		IP address range: 192.168.203.0/24
+```
 
-		gcloud compute networks create ts-pan-trust-vpc --project=kt-nas-demo --description="ThreatSim Demo - Palo Alto Trusted NIC VPC" --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional
-		gcloud compute networks subnets create ts-pan-trust-subnet --project=kt-nas-demo --range=192.168.203.0/24 --network=ts-pan-trust-vpc --region=us-west1
+```
+gcloud compute networks create ts-pan-trust-vpc --project=kt-nas-demo --description="ThreatSim Demo - Palo Alto Trusted NIC VPC" --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional
+gcloud compute networks subnets create ts-pan-trust-subnet --project=kt-nas-demo --range=192.168.203.0/24 --network=ts-pan-trust-vpc --region=us-west1
+```
 
 2. Create VPC Firewall rules in ````ts-demo-vpc```` to permit HTTP and HTTPS traffic to any target tagged as ````http-server```` and ````https-server````
 
