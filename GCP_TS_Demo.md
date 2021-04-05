@@ -213,8 +213,9 @@ In this iteration of the demo, a combination of the following security monitorin
 		sudo -u threatsim /bin/bash /home/threatsim/install-siem-agent.sh
 
 
-9. Configure NTP for time syncronization on SIEM Agent instance 
 [//]: # (TODO check if chronyd is on by default - if so, than ntp is not needed)
+
+9. Configure NTP for time syncronization on SIEM Agent instance 
 
 		sudo apt update
 		sudo apt install ntp -y
