@@ -377,30 +377,32 @@ gcloud compute firewall-rules create fw-allow-health-checks \
 
 3. VPC Network > Packet Mirroring, Create Policy. Take a note on Frontend Internal IP automatically assigned when creating a load balancer.
 
-		Name: ts-demo-pan-mirror
-		Region: us-west1
-		Policy enforcement: Enabled
-		Mirrored source and destinations are in the same VPC network: ts-demo-vpc
-		Mirrored source: Select with network tags: ts-agent
-		Mirrored destination: Create new L4 internal load balancer
-			Name: ts-demo-pan-ids-ilb
-			Backend configuration:
-				Region: us-west1
-				Network: ts-demo-vpc
-				Backends instance Group: pan-ids-ig
-				Health check: ssh-health-check
-			Frontend configuration:
-				Name: ts-demo-pan-ids-ilb-fe
-				Subnetwork: ts-demo-ids-subnet
-				Internal IP
-					Purpose: Non-shared
-					IP address: Static internal IP address
-						Name: ts-demo-pan-ids-ilb-fe-ip
-						Address: Assign automatically
-				Global access: Disable
-				Packet mirroring (advanced configuration): Enable this load balancer for Packet Mirroring
-		Collector destination: ts-demo-pan-ids-ilb-fe
-		Select mirrored traffic: Mirror all traffic
+| Parameter 																										| Value
+| ---																														| ---
+| Name																													| `ts-demo-pan-mirror`
+| Region																												| us-west1
+| Policy enforcement																						| Enabled
+| Mirrored source and destinations are in the same VPC network	| `ts-demo-vpc`
+| Mirrored source - Select with network tags										| `ts-agent`
+| Mirrored destination																					| Create new L4 internal load balancer
+| 	Name																												| `ts-demo-pan-ids-ilb`
+| 	Backend configuration |
+| 		Region																										| us-west1
+| 		Network																										| `ts-demo-vpc`
+| 		Backends instance Group																		| `pan-ids-ig`
+| 		Health check																							| `ssh-health-check`
+| 	Frontend configuration |
+| 		Name																											| `ts-demo-pan-ids-ilb-fe`
+| 		Subnetwork																								| `ts-demo-ids-subnet`
+| 		Internal IP |
+| 			Purpose																									| Non-shared
+| 			IP address																							| Static internal IP address
+| 				Name																									| `ts-demo-pan-ids-ilb-fe-ip`
+| 				Address																								| Assign automatically
+| 		Global access																							| Disable
+| 		Packet mirroring (advanced configuration)									| Enable this load balancer for Packet Mirroring
+| Collector destination																					| `ts-demo-pan-ids-ilb-fe`
+| Select mirrored traffic																				| Mirror all traffic
 
 4. Create firewall rules to permit mirrored traffic
 
