@@ -303,32 +303,33 @@ cat >> props.conf << EOF
 TZ = US/Pacific
 EOF
 ```
- 
 
 ## Palo Alto Networks IDS deployment
 
 1. Deploy PAN IDS instance. GCP Compute instances > Create new > Marketplace: Palo Alto VM-Series Next-Generation Firewall (Bundle1)
 
-		Deployment name: vmseries-flex-bundle1-1
-		Zone: us-west1-b
-		Machine type: 4 vCPUs / 15G RAM
-		Interfaces swap: Yes
-		SSH Key: <admin:ssh-rsa ADD PUBLIC SSH KEY HERE>
-		Networking (VPCs and subnets must be pre-created):
-			Network (for nic0 - IDS): ts-demo-vpc
-			Subnetwork: ts-demo-ids-subnet
-			Enable External IP for Management inteface: No
-			
-			Network (for nic1 - MGMT): default
-			Subnetwork: default
-			Enable External IP for Untrust: Yes
-			
-			Network (for nic 2 - Trust): ts-pan-trust-vpc
-			Subnetwork: ts-pan-trust-subnet
-			Enable External IP for Trust: No
+| Parameter 																													| Value
+| ---																																	| ---
+| Deployment name																											| `vmseries-flex-bundle1-1`
+| Zone																																| us-west1-b
+| Machine type																												| 4 vCPUs / 15G RAM
+| Interfaces swap																											| Yes
+| SSH Key																															| `<admin:ssh-rsa ADD PUBLIC SSH KEY HERE>`
+| Networking (VPCs and subnets must be pre-created)
+| &nbsp;&nbsp;&nbsp;&nbsp;Network (for nic0 - IDS)										| ts-demo-vpc
+| &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork 																	| ts-demo-ids-subnet
+| &nbsp;&nbsp;&nbsp;&nbsp;Enable External IP for Management inteface	| No
+| 	
+| &nbsp;&nbsp;&nbsp;&nbsp;Network (for nic1 - MGMT)										| default
+| &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork																	| default
+| &nbsp;&nbsp;&nbsp;&nbsp;Enable External IP for Untrust							| Yes
+| 	
+| &nbsp;&nbsp;&nbsp;&nbsp;Network (for nic 2 - Trust)									| ts-pan-trust-vpc
+| &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork																	| ts-pan-trust-subnet
+| &nbsp;&nbsp;&nbsp;&nbsp;Enable External IP for Trust								| No
 
-	See https://docs.paloaltonetworks.com/vm-series/9-1/vm-series-deployment/set-up-the-vm-series-firewall-on-google-cloud-platform/prepare-to-set-up-the-vm-series-firewall-on-a-google-instance.html#id1819C02I0AS_id821c495f-3ff8-488d-ab61-28692ab1ce26
-	
+See https://docs.paloaltonetworks.com/vm-series/9-1/vm-series-deployment/set-up-the-vm-series-firewall-on-google-cloud-platform/prepare-to-set-up-the-vm-series-firewall-on-a-google-instance.html#id1819C02I0AS_id821c495f-3ff8-488d-ab61-28692ab1ce26
+
 2. Edit PAN IDS instance and add Network tags: ````pan-security````
 
 4. Permit connection to PAN IDS management in VPC Firewall by running the following command in GCP Console
