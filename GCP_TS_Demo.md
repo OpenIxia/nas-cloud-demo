@@ -405,7 +405,7 @@ gcloud compute firewall-rules create fw-allow-health-checks \
 Egress from source instances. Use an IP address assiged as a Frontend Internal IP in the previous step as ````--destination-ranges````.
 
 ```Shell
-		gcloud compute --project=kt-nas-demo firewall-rules create bortok-ts-demo-packet-mirror-egress --description="Packet mirroring egress from sources to PAN" --direction=EGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=all --destination-ranges=192.168.202.4/32
+gcloud compute --project=kt-nas-demo firewall-rules create bortok-ts-demo-packet-mirror-egress --description="Packet mirroring egress from sources to PAN" --direction=EGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=all --destination-ranges=192.168.202.4/32
 ```
 
 Ingress to PAN IDS
