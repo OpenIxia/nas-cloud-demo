@@ -9,3 +9,6 @@ A collection of cloud-based demonstrations of Keysight Technologies' Network, Ap
 # Copyright notice
 
 COPYRIGHT 2021 Keysight Technologies.
+
+This code is provided under the MIT license.
+You can find the complete terms in LICENSE.txt
