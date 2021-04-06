@@ -13,6 +13,11 @@ In this iteration of the demo, a combination of the following security monitorin
 * Palo Alto Networks vm-series firewall acting as an IDS, and
 * Splunk Enterprise log data indexing solution acting as a SIEM.
 
+## Diagram
+
+![GCP Cloud Security Monitoring Demo Diagram](./diagrams/GCP_TS_Demo_PAN.svg)
+<img src="./diagrams/GCP_TS_Demo_PAN.svg">
+
 ## IMPORTANT! Adopting command syntax to your environment
 
 1. Throughout the document, a parameter ````--project=kt-nas-demo```` with GCP Project ID is used for ````gcloud```` command syntax. Please change ````kt-nas-demo```` to specify a GCP Project ID you intend to use for the deployment
