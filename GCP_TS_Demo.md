@@ -270,21 +270,23 @@ sudo apt install ntp -y
 1. Start with Splunk SIEM configuration for Palo Alto Networks IDS. In Splunk Web UI, go to Apps → Find More Apps, type "Palo Alto Networks Add-on for Splunk" in search field. From search results, choose "Palo Alto Networks Add-on for Splunk" and click Install. Once done, click "Go Home".
 2. Create index: Go to Settings > Data > Indexes. Select New index and configure the following and Save
 	
-		Index name: pan
-		App: Palo Alto Networks Add-on
+| Parameter 					 | Value
+| --- 								 | ---
+| Index name           | `pan`
+| App                  | Palo Alto Networks Add-on
 
 3.	Create data input (TCP): Go to Settings > Data > Data inputs. In the Local inputs section, click Add new (from TCP section). Configure:
 	
-		Parameter 						| Value
-		--- 									| ---
-		Input Type 						| TCP Port
-		Port Number 					| 5614
-		Source name override 	| N/A
-		Restrict to Host 			| N/A
-		Source Type 					| pan:log
-		App Context 					| Palo Alto Networks Add-on
-		Method 								| IP
-		Index 								| pan
+| Parameter 						| Value
+| --- 									| ---
+| Input Type 						| TCP Port
+| Port Number 					| `5614`
+| Source name override 	| N/A
+| Restrict to Host 			| N/A
+| Source Type 					| `pan:log`
+| App Context 					| Palo Alto Networks Add-on
+| Method 								| IP
+| Index 								| `pan`
 
 4. Permit connection to the Splunk Data input service in VPC Firewall by running the following command in GCP Console
 
