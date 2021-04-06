@@ -15,7 +15,7 @@ In this iteration of the demo, a combination of the following security monitorin
 
 ## Diagram
 
-![GCP Cloud Security Monitoring Demo Diagram](diagrams/GCP_TS_Demo_PAN.svg)
+![GCP Cloud Security Monitoring Demo Diagram](diagrams/GCP_TS_Demo_PAN.png)
 
 ## IMPORTANT! Adopting command syntax to your environment
 
