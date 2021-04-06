@@ -70,7 +70,7 @@ gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-allow-https -
 2. Once the eval is approved, login to [Theat Simulator console](https://threatsimulator.cloud/login), navigate to Deployment page, and open "Anywhere" for a deployment type
 3. Scroll down to AGENT INSTALLATION to a CURL command line, which looks similar to the following. In your case, there will be a different ````OrganizationID````. Agent version would vary with time as well.
 
-```
+```Shell
 curl "https://api.threatsimulator.cloud/agent/download?OrganizationID=1234567890abcdef1234567890abcdef&Type=onpremise-linux" > agent-21.3.0.2325.run
 ```
 
