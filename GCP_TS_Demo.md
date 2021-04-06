@@ -316,16 +316,16 @@ EOF
 | Interfaces swap																											| Yes
 | SSH Key																															| `<admin:ssh-rsa ADD PUBLIC SSH KEY HERE>`
 | Networking (VPCs and subnets must be pre-created)
-| Untrust |
-| &nbsp;&nbsp;&nbsp;&nbsp;Network (for nic0 - IDS)										| ts-demo-vpc
+| nic0 - IDS (Untrust) |
+| &nbsp;&nbsp;&nbsp;&nbsp;Network																			| ts-demo-vpc
 | &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork 																	| ts-demo-ids-subnet
 | &nbsp;&nbsp;&nbsp;&nbsp;Enable External IP for Management inteface	| No
-| Management |
-| &nbsp;&nbsp;&nbsp;&nbsp;Network (for nic1 - MGMT)										| default
+| nic1 - Management |
+| &nbsp;&nbsp;&nbsp;&nbsp;Network																			| default
 | &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork																	| default
 | &nbsp;&nbsp;&nbsp;&nbsp;Enable External IP for Untrust							| Yes
-| Trust |
-| &nbsp;&nbsp;&nbsp;&nbsp;Network (for nic 2 - Trust)									| ts-pan-trust-vpc
+| nic2 - Not used (Trust) |
+| &nbsp;&nbsp;&nbsp;&nbsp;Network																			| ts-pan-trust-vpc
 | &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork																	| ts-pan-trust-subnet
 | &nbsp;&nbsp;&nbsp;&nbsp;Enable External IP for Trust								| No
 
