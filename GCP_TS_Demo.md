@@ -10,8 +10,8 @@ The demo is targeting a passive network monitoring security tool deployment, ope
 
 In this iteration of the demo, a combination of the following security monitoring products is being tested:
 
-* Palo Alto Networks vm-series firewall acting as an IDS, and
-* Splunk Enterprise log data indexing solution acting as a SIEM.
+* [Palo Alto Networks vm-series firewall](https://console.cloud.google.com/marketplace/product/paloaltonetworksgcp-public/vmseries-flex-bundle1) acting as an [IDS](https://live.paloaltonetworks.com/t5/blogs/vm-series-now-integrates-with-gcp-packet-mirroring/ba-p/302784), and
+* [Splunk Enterprise](https://www.splunk.com/en_us/software/splunk-enterprise.html) log data indexing solution acting as a [SIEM](https://en.wikipedia.org/wiki/Security_information_and_event_management).
 
 ## Diagram
 
