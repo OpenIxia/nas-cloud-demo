@@ -313,17 +313,17 @@ EOF
 | Deployment name																											| `vmseries-flex-bundle1-1`
 | Zone																																| us-west1-b
 | Machine type																												| 4 vCPUs / 15G RAM
-| Interfaces swap																											| Yes
+| Interfaces swap																											| Yes (*Do not miss this one!*)
 | SSH Key																															| `<admin:ssh-rsa ADD PUBLIC SSH KEY HERE>`
 | Networking (VPCs and subnets must be pre-created)
 | nic0 - Untrust (IDS) |
 | &nbsp;&nbsp;&nbsp;&nbsp;Network																			| `ts-demo-vpc`
 | &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork 																	| `ts-demo-ids-subnet`
-| &nbsp;&nbsp;&nbsp;&nbsp;Enable External IP for Management inteface	| No
+| &nbsp;&nbsp;&nbsp;&nbsp;Enable External IP for Management inteface	| No (*swapped to Untrust*)
 | nic1 - Management |
 | &nbsp;&nbsp;&nbsp;&nbsp;Network																			| `default`
 | &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork																	| `default`
-| &nbsp;&nbsp;&nbsp;&nbsp;Enable External IP for Untrust							| Yes
+| &nbsp;&nbsp;&nbsp;&nbsp;Enable External IP for Untrust							| Yes (*swapped to Management*)
 | nic2 - Trust (not used) |
 | &nbsp;&nbsp;&nbsp;&nbsp;Network																			| `ts-pan-trust-vpc`
 | &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork																	| `ts-pan-trust-subnet`
