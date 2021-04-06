@@ -404,6 +404,8 @@ gcloud compute firewall-rules create fw-allow-health-checks \
 | Collector destination																					| `ts-demo-pan-ids-ilb-fe`
 | Select mirrored traffic																				| Mirror all traffic
 
+[//]: # (TODO gcloud command for packet mirror setup)
+
 4. Create firewall rules to permit mirrored traffic
 
 Egress from source instances. Use an IP address assiged as a Frontend Internal IP in the previous step as ````--destination-ranges````.
