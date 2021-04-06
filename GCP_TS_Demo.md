@@ -17,10 +17,10 @@ In this iteration of the demo, a combination of the following security monitorin
 
 ![GCP Cloud Security Monitoring Demo Diagram](diagrams/GCP_TS_Demo_PAN.png)
 
-## IMPORTANT! Adopting command syntax to your environment
+## Adopting command syntax to your environment
 
-1. Throughout the document, a CP Project ID parameter ````--project=kt-nas-demo```` is used for ````gcloud```` command syntax. Please change ````kt-nas-demo```` to specify a GCP Project ID you intend to use for the deployment
-2. Where applicable, GCP Region ````us-west1```` (Oregon) and/or Zone ````us-west1-b```` are used withing the document. Consider changing to a region and zone that fit your deployment via ````--region=us-west1```` and ````--zone=us-west1-b```` parameters.
+1. Throughout the document, a CP Project ID parameter `--project=kt-nas-demo` is used for `gcloud` command syntax. Please change `kt-nas-demo` to specify a GCP Project ID you intend to use for the deployment
+2. Where applicable, GCP Region `us-west1` (Oregon) and/or Zone `us-west1-b` are used withing the document. Consider changing to a region and zone that fit your deployment via `--region=us-west1` and `--zone=us-west1-b` parameters.
 
 ## GCP VPC Configuration
 
@@ -60,14 +60,14 @@ gcloud compute networks create ts-pan-trust-vpc --project=kt-nas-demo --descript
 gcloud compute networks subnets create ts-pan-trust-subnet --project=kt-nas-demo --range=192.168.203.0/24 --network=ts-pan-trust-vpc --region=us-west1
 ```
 
-2. Create VPC Firewall rules in ````ts-demo-vpc```` to permit HTTP and HTTPS traffic to any target tagged as ````http-server```` and ````https-server````
+2. Create VPC Firewall rules in `ts-demo-vpc` to permit HTTP and HTTPS traffic to any target tagged as `http-server` and `https-server`
 
 ```Shell
 gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-allow-http --description="Allow http ingress to any instance tagged as http-server" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags=http-server
 gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-allow-https --description="Allow https ingress to any instance tagged as https-server" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=tcp:443 --source-ranges=0.0.0.0/0 --target-tags=https-server
 ```
 
-3. (Optional) Permit SSH access to GCP instances via browser session. See [https://cloud.google.com/iap/docs/using-tcp-forwarding](https://cloud.google.com/iap/docs/using-tcp-forwarding) for more information.
+3. (Optional) Permit SSH access to GCP instances via a browser. See [https://cloud.google.com/iap/docs/using-tcp-forwarding](https://cloud.google.com/iap/docs/using-tcp-forwarding) for more information.
 
 ```Shell
 gcloud compute --project=kt-nas-demo firewall-rules create allow-ssh-from-browser-default-vpc --description="https://cloud.google.com/iap/docs/using-tcp-forwarding" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:22 --source-ranges=35.235.240.0/20
@@ -78,13 +78,13 @@ gcloud compute --project=kt-nas-demo firewall-rules create allow-ssh-from-browse
 
 1. If you do not have an active Threat Simulator account, request an evaluation access at [https://threatsimulator.cloud/login](https://threatsimulator.cloud/login)
 2. Once the eval is approved, login to [Theat Simulator console](https://threatsimulator.cloud/login), navigate to Deployment page, and open "Anywhere" for a deployment type
-3. Scroll down to AGENT INSTALLATION to a CURL command line, which looks similar to the following. In your case, there will be a different ````OrganizationID````. Agent version would vary with time as well.
+3. Scroll down to AGENT INSTALLATION to a CURL command line, which looks similar to the following. In your case, there will be a different `OrganizationID`. Agent version would vary with time as well.
 
 ```Shell
 curl "https://api.threatsimulator.cloud/agent/download?OrganizationID=1234567890abcdef1234567890abcdef&Type=onpremise-linux" > agent-21.3.0.2325.run
 ```
 
-4. Copy the 32-character value of ````OrganizationID```` string from the line above and paste it to the script below on the line ````organizationID```` right after the ````=```` sign. Deploy a Threat Simulator Agent instance on GCP by running the following command in GCP Console.
+4. Copy the 32-character value of `OrganizationID` string from the line above and paste it to the script below on the line `organizationID` right after the `=` sign. Deploy a Threat Simulator Agent instance on GCP by running the following command in GCP Console.
 
 [//]: # (TODO consider making the name of the agent to reflect the instance name.)  
 
@@ -342,7 +342,7 @@ EOF
 
 See https://docs.paloaltonetworks.com/vm-series/9-1/vm-series-deployment/set-up-the-vm-series-firewall-on-google-cloud-platform/prepare-to-set-up-the-vm-series-firewall-on-a-google-instance.html#id1819C02I0AS_id821c495f-3ff8-488d-ab61-28692ab1ce26
 
-2. Edit PAN IDS instance and add Network tags: ````pan-security````
+2. Edit PAN IDS instance and add Network tags: `pan-security`
 
 4. Permit connection to PAN IDS management in VPC Firewall by running the following command in GCP Console
 
@@ -419,7 +419,7 @@ gcloud compute firewall-rules create fw-allow-health-checks \
 
 4. Create firewall rules to permit mirrored traffic
 
-Egress from source instances. Use an IP address assiged as a Frontend Internal IP in the previous step as ````--destination-ranges````.
+Egress from source instances. Use an IP address assiged as a Frontend Internal IP in the previous step as `--destination-ranges`.
 
 ```Shell
 gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-packet-mirror-egress --description="Packet mirroring egress from sources to PAN" --direction=EGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=all --destination-ranges=192.168.202.4/32
@@ -432,5 +432,5 @@ gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-packet-mirror
 ```
 	
 
-4. In PAN IDS configuration, add a loopback.1 interface with an IP address assiged as a Frontend Internal IP in the previous step. Add loopback.1 to a virtual router configuration. Create static routes for the following health-check IP address ranges: ````35.191.0.0/16,130.211.0.0/22```` pointing to a default gateway in the subnet of ````Ethenet1/1```` interface: ````192.168.202.1````
+4. In PAN IDS configuration, add a loopback.1 interface with an IP address assiged as a Frontend Internal IP in the previous step. Add loopback.1 to a virtual router configuration. Create static routes for the following health-check IP address ranges: `35.191.0.0/16,130.211.0.0/22` pointing to a default gateway in the subnet of `Ethenet1/1` interface: `192.168.202.1`
 
