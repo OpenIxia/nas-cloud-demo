@@ -39,12 +39,12 @@ Subnets: custom
 | Name 									| ts-demo-vpc
 | Description 					| ThreatSim Demo
 | Subnets 							| custom
-|   Name 								| ts-demo-app-subnet
-|   Region 							| us-west1
-|     IP address range 	| 192.168.201.0/24
-|   Name 								| ts-demo-ids-subnet
-|   Region 							| us-west1
-|     IP address range 	| 192.168.202.0/24
+| 	Name 								| ts-demo-app-subnet
+| 	Region 							| us-west1
+| 		IP address range 	| 192.168.201.0/24
+| 	Name 								| ts-demo-ids-subnet
+| 	Region 							| us-west1
+| 		IP address range 	| 192.168.202.0/24
 
 ```Shell
 gcloud compute networks create ts-demo-vpc --project=kt-nas-demo --description="ThreatSim Demo" --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional
