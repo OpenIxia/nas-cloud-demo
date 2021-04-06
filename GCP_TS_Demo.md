@@ -257,13 +257,13 @@ sudo apt install ntp -y
 | Parameter 					 | Value
 | --- 								 | ---
 | Input Type 					 | TCP Port
-| Port Number 				 | 5514
+| Port Number 				 | `5514`
 | Source name override | N/A
 | Restrict to Host 		 | N/A
-| Source Type 				 | threatsim
-| App Context 				 | TA_threatsimulator
+| Source Type 				 | `threatsim`
+| App Context 				 | `TA_threatsimulator`
 | Method 							 | IP
-| Index 							 | threatsim
+| Index 							 | `threatsim`
 
 ## Prepare Splunk SIEM for Palo Alto Networks IDS integration
 
