@@ -58,8 +58,10 @@ gcloud compute networks subnets create ts-pan-trust-subnet --project=kt-nas-demo
 
 2. Create VPC Firewall rules in ````ts-demo-vpc```` to permit HTTP and HTTPS traffic to any target tagged as ````http-server```` and ````https-server````
 
-		gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-allow-http --description="Allow http ingress to any instance tagged as http-server" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags=http-server
-		gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-allow-https --description="Allow https ingress to any instance tagged as https-server" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=tcp:443 --source-ranges=0.0.0.0/0 --target-tags=https-server
+```
+gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-allow-http --description="Allow http ingress to any instance tagged as http-server" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags=http-server
+gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-allow-https --description="Allow https ingress to any instance tagged as https-server" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=tcp:443 --source-ranges=0.0.0.0/0 --target-tags=https-server
+```
 
 
 ## Threat Simulator Workload Deployment
@@ -68,7 +70,9 @@ gcloud compute networks subnets create ts-pan-trust-subnet --project=kt-nas-demo
 2. Once the eval is approved, login to [Theat Simulator console](https://threatsimulator.cloud/login), navigate to Deployment page, and open "Anywhere" for a deployment type
 3. Scroll down to AGENT INSTALLATION to a CURL command line, which looks similar to the following. In your case, there will be a different ````OrganizationID````. Agent version would vary with time as well.
 
-		curl "https://api.threatsimulator.cloud/agent/download?OrganizationID=1234567890abcdef1234567890abcdef&Type=onpremise-linux" > agent-21.3.0.2325.run
+```
+curl "https://api.threatsimulator.cloud/agent/download?OrganizationID=1234567890abcdef1234567890abcdef&Type=onpremise-linux" > agent-21.3.0.2325.run
+```
 
 4. Copy the 32-character value of ````OrganizationID```` string from the line above and paste it to the script below on the line ````organizationID```` right after the ````=```` sign. Deploy a Threat Simulator Agent instance on GCP by running the following command in GCP Console.
 
@@ -87,32 +91,34 @@ gcloud compute networks subnets create ts-pan-trust-subnet --project=kt-nas-demo
 [//]: # (--shielded-vtpm \)
 [//]: # (--shielded-integrity-monitoring \)
 
-		gcloud compute instances create ts-workload-1 \
-		--zone=us-west1-b \
-		--machine-type=e2-small \
-		--subnet=ts-demo-app-subnet \
-		--image-family=ubuntu-2004-lts \
-		--image-project=ubuntu-os-cloud \
-		--boot-disk-size=10GB \
-		--boot-disk-device-name=ts-workload-1 \
-		--tags=ts-agent,http-server,https-server \
-		--metadata=startup-script='#!/bin/bash -xe
-		if [ ! -f /home/threatsim/.tsinstalled ]; then
-			sysctl -w net.ipv6.conf.all.disable_ipv6=1
-			sysctl -w net.ipv6.conf.default.disable_ipv6=1
-			apt update
-			apt -y install docker.io
-			systemctl restart docker
-			systemctl enable docker
-			useradd -m -G google-sudoers threatsim
-			organizationID="1234567890abcdef1234567890abcdef"
-			name="GCP-Demo-1"
-			APIbaseURL="https://api.threatsimulator.cloud"
-			curl $APIbaseURL/agent/download\?OrganizationID\=${organizationID}\&Type\=onpremise-linux >/home/threatsim/agent-init.run
-			chown threatsim:threatsim /home/threatsim/agent-init.run
-			sudo -u threatsim /bin/bash /home/threatsim/agent-init.run --quiet -- -y -n "${name}"
-			if [ `docker ps -qf name=ts-filebeat | wc -l` -ge 1 ]; then touch /home/threatsim/.tsinstalled; fi
-		fi'
+```
+gcloud compute instances create ts-workload-1 \
+--zone=us-west1-b \
+--machine-type=e2-small \
+--subnet=ts-demo-app-subnet \
+--image-family=ubuntu-2004-lts \
+--image-project=ubuntu-os-cloud \
+--boot-disk-size=10GB \
+--boot-disk-device-name=ts-workload-1 \
+--tags=ts-agent,http-server,https-server \
+--metadata=startup-script='#!/bin/bash -xe
+if [ ! -f /home/threatsim/.tsinstalled ]; then
+	sysctl -w net.ipv6.conf.all.disable_ipv6=1
+	sysctl -w net.ipv6.conf.default.disable_ipv6=1
+	apt update
+	apt -y install docker.io
+	systemctl restart docker
+	systemctl enable docker
+	useradd -m -G google-sudoers threatsim
+	organizationID="1234567890abcdef1234567890abcdef"
+	name="GCP-Demo-1"
+	APIbaseURL="https://api.threatsimulator.cloud"
+	curl $APIbaseURL/agent/download\?OrganizationID\=${organizationID}\&Type\=onpremise-linux >/home/threatsim/agent-init.run
+	chown threatsim:threatsim /home/threatsim/agent-init.run
+	sudo -u threatsim /bin/bash /home/threatsim/agent-init.run --quiet -- -y -n "${name}"
+	if [ `docker ps -qf name=ts-filebeat | wc -l` -ge 1 ]; then touch /home/threatsim/.tsinstalled; fi
+fi'
+```
 		
 5. After about 5 minutes the Threat Simulator workload should appear in Threat Simulator UI under [Agents](https://threatsimulator.cloud/security/agent) section
 
