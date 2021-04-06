@@ -2,7 +2,7 @@
 
 ## Overview
 
-The demo is targeting a passive network monitoring security tool deployment operating in a [Google Compute Cloud (GCP)](https://cloud.google.com/) environment. It is assumed the tool should be receiving network traffic via  [GCP Packet Mirroring](https://cloud.google.com/vpc/docs/packet-mirroring) service. Throughout the demo, a breach and attack simulation software [Keysight Threat Simulator](https://www.keysight.com/us/en/products/network-security/breach-defense/threat-simulator.html) is used to create conditions resemling a real malicious activity. The goals of the demo are:
+The demo is targeting a passive network monitoring security tool deployment, operating in a [Google Compute Cloud (GCP)](https://cloud.google.com/) environment. It is assumed the tool should be receiving network traffic via  [GCP Packet Mirroring](https://cloud.google.com/vpc/docs/packet-mirroring) service. Throughout the demo, a breach and attack simulation software [Keysight Threat Simulator](https://www.keysight.com/us/en/products/network-security/breach-defense/threat-simulator.html) is used to create conditions resembling a real malicious activity. The goals of the demo are:
 
 * Validate operational readiness and basic efficacy of a network security moniring tool.
 * Compare efficacy of multiple tools against identical attack scenarious.
@@ -15,7 +15,7 @@ In this iteration of the demo, a combination of the following security monitorin
 
 ## IMPORTANT! Adopting command syntax to your environment
 
-1. Throughout the document, a parameter ````--project=kt-nas-demo```` with GCP Project ID is used for ````gcloud```` command syntax. Please change ````ks-nas-demo```` to your GCP Project ID.
+1. Throughout the document, a parameter ````--project=kt-nas-demo```` with GCP Project ID is used for ````gcloud```` command syntax. Please change ````kt-nas-demo```` to specify a GCP Project ID you intend to use for the deployment
 2. Where applicable, GCP Region ````us-west1```` (Oregon) and/or Zone ````us-west1-b```` are used withing the document. Consider changing to a region and zone that fit your deployment via ````--region=us-west1```` and ````--zone=us-west1-b```` parameters.
 
 ## GCP VPC Configuration
