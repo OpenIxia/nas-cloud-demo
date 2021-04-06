@@ -363,7 +363,11 @@ commit
 
 7. Configure PAN as an IDS (outside the scope of this guide)
 
-8. Configure Event forwarding from PAN IDS to Splunk (see "BreakingPoint Cloud – How to forward Palo Alto events to Splunk" guide). Note - using hostname for syslog server didn't work, you have to use an IP address
+[//]: # (TODO document this)
+
+8. Configure Event forwarding from PAN IDS to Splunk (outside the scope of this guide)
+
+[//]: # (TODO document this)
 
 ## GCP Packet Mirroring configuration
 1. Start with creating an unmanaged GCP Instace Group for Packet Mirroring load balancer backends with PAN IDS monitoring interface:
