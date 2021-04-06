@@ -188,9 +188,9 @@ sudo apt install ntp -y
 6. Permit connection to Splunk services in VPC Firewall by running the following command in GCP Console
 
 ```Shell
-gcloud compute --project=kt-nas-demo firewall-rules create bortok-ts-splunk --description="Access to Splunk instace" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:8000 --source-ranges=0.0.0.0/0 --target-tags=splunk-server
-gcloud compute --project=kt-nas-demo firewall-rules create bortok-ts-splunk-syslog --description="Syslog to Splunk instace" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:5514 --source-tags=ts-siem-agent --target-tags=splunk-server
-gcloud compute --project=kt-nas-demo firewall-rules create bortok-ts-splunk-api --description="API to Splunk instace" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:8089 --source-tags=ts-siem-agent --target-tags=splunk-server
+gcloud compute --project=kt-nas-demo firewall-rules create ts-splunk --description="Access to Splunk instace" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:8000 --source-ranges=0.0.0.0/0 --target-tags=splunk-server
+gcloud compute --project=kt-nas-demo firewall-rules create ts-splunk-syslog --description="Syslog to Splunk instace" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:5514 --source-tags=ts-siem-agent --target-tags=splunk-server
+gcloud compute --project=kt-nas-demo firewall-rules create ts-splunk-api --description="API to Splunk instace" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:8089 --source-tags=ts-siem-agent --target-tags=splunk-server
 ```
 	
 	
@@ -290,7 +290,7 @@ sudo apt install ntp -y
 4. Permit connection to the Splunk Data input service in VPC Firewall by running the following command in GCP Console
 
 ```Shell
-gcloud compute --project=kt-nas-demo firewall-rules create bortok-ts-splunk-syslog-pan --description="PAN Syslog to Splunk instace" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:5614 --source-tags=pan-security --target-tags=splunk-server
+gcloud compute --project=kt-nas-demo firewall-rules create ts-splunk-syslog-pan --description="PAN Syslog to Splunk instace" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:5614 --source-tags=pan-security --target-tags=splunk-server
 ```
 	
 5. Configure your specific timezone on Splunk instance via SSH
@@ -336,7 +336,7 @@ See https://docs.paloaltonetworks.com/vm-series/9-1/vm-series-deployment/set-up-
 4. Permit connection to PAN IDS management in VPC Firewall by running the following command in GCP Console
 
 ```Shell
-gcloud compute --project=kt-nas-demo firewall-rules create bortok-ts-pan-mgmt --description="PAN Management" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:443,tcp:22 --source-ranges=0.0.0.0/0 --target-tags=pan-security
+gcloud compute --project=kt-nas-demo firewall-rules create ts-pan-mgmt --description="PAN Management" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:443,tcp:22 --source-ranges=0.0.0.0/0 --target-tags=pan-security
 ```
 		
 5. Connect via SSH to the PAN IDS instance, setup admin password
@@ -407,13 +407,13 @@ gcloud compute firewall-rules create fw-allow-health-checks \
 Egress from source instances. Use an IP address assiged as a Frontend Internal IP in the previous step as ````--destination-ranges````.
 
 ```Shell
-gcloud compute --project=kt-nas-demo firewall-rules create bortok-ts-demo-packet-mirror-egress --description="Packet mirroring egress from sources to PAN" --direction=EGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=all --destination-ranges=192.168.202.4/32
+gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-packet-mirror-egress --description="Packet mirroring egress from sources to PAN" --direction=EGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=all --destination-ranges=192.168.202.4/32
 ```
 
 Ingress to PAN IDS
 	
 ```Shell
-gcloud compute --project=kt-nas-demo firewall-rules create bortok-ts-demo-packet-mirror-pan --description="Packet mirrirong ingress traffic to PAN IDS" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=all --source-ranges=0.0.0.0/0 --target-tags=pan-security
+gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-packet-mirror-pan --description="Packet mirrirong ingress traffic to PAN IDS" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=all --source-ranges=0.0.0.0/0 --target-tags=pan-security
 ```
 	
 
