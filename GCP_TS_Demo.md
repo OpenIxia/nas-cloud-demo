@@ -5,7 +5,7 @@
 The demo is targeting a passive network monitoring security tool deployment, operating in a [Google Compute Cloud (GCP)](https://cloud.google.com/) environment. It is assumed the tool should be receiving network traffic via  [GCP Packet Mirroring](https://cloud.google.com/vpc/docs/packet-mirroring) service. Throughout the demo, a breach and attack simulation software [Keysight Threat Simulator](https://www.keysight.com/us/en/products/network-security/breach-defense/threat-simulator.html) is used to create conditions resembling a real malicious activity. The goals of the demo are:
 
 * Validate operational readiness and basic efficacy of a network security moniring tool.
-* Compare efficacy of multiple tools against identical attack scenarious.
+* Compare efficacy of [various tools](https://cloud.google.com/vpc/docs/packet-mirroring-partners) against identical attack scenarious - as more tools are added to the demo.
 * Fine tune configuration of the tool to increace its efficacy.
 
 In this iteration of the demo, a combination of the following security monitoring products is being tested:
