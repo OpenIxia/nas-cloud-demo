@@ -313,7 +313,7 @@ EOF
 | Deployment name																											| `vmseries-flex-bundle1-1`
 | Zone																																| us-west1-b
 | Machine type																												| 4 vCPUs / 15G RAM
-| Interfaces swap																											| Yes (*Do not miss this one!*)
+| Interfaces swap																											| Yes (**Do not miss this one!**)
 | SSH Key																															| `<admin:ssh-rsa ADD PUBLIC SSH KEY HERE>`
 | Networking (VPCs and subnets must be pre-created)
 | nic0 - Untrust (IDS) |
