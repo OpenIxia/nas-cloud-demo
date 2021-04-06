@@ -36,15 +36,15 @@ Subnets: custom
 
 | Parameter 						| Value
 | --- 									| ---
-| Name 									| ts-demo-vpc
+| Name 									| `ts-demo-vpc`
 | Description 					| ThreatSim Demo
 | Subnets 							| custom
-| &nbsp;&nbsp;Name 								| ts-demo-app-subnet
-| &nbsp;&nbsp;Region 							| us-west1
-| &nbsp;&nbsp;&nbsp;&nbsp;IP address range 	| 192.168.201.0/24
-| &nbsp;&nbsp;Name 								| ts-demo-ids-subnet
-| &nbsp;&nbsp;Region 							| us-west1
-| &nbsp;&nbsp;&nbsp;&nbsp;IP address range 	| 192.168.202.0/24
+| &nbsp;&nbsp;&nbsp;&nbsp;Name 								| `ts-demo-app-subnet`
+| &nbsp;&nbsp;&nbsp;&nbsp;Region 							| us-west1
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP address range 	| `192.168.201.0/24`
+| &nbsp;&nbsp;&nbsp;&nbsp;Name 								| `ts-demo-ids-subnet`
+| &nbsp;&nbsp;&nbsp;&nbsp;Region 							| us-west1
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP address range 	| `192.168.202.0/24`
 
 ```Shell
 gcloud compute networks create ts-demo-vpc --project=kt-nas-demo --description="ThreatSim Demo" --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional
