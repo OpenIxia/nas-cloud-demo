@@ -2,13 +2,13 @@
 
 ## Overview
 
-The demo is targeting a passive network monitoring security tool deployment, operating in a [Google Compute Cloud (GCP)](https://cloud.google.com/) environment. It is assumed the tool should be receiving network traffic via  [GCP Packet Mirroring](https://cloud.google.com/vpc/docs/packet-mirroring) service. Throughout the demo, a breach and attack simulation software [Keysight Threat Simulator](https://www.keysight.com/us/en/products/network-security/breach-defense/threat-simulator.html) is used to create conditions resembling a real malicious activity. The goals of the demo are:
+The demo is targeting a passive network monitoring security tool deployment, operating in [Google Compute Cloud (GCP)](https://cloud.google.com/) environment. It is assumed the tool should be receiving network traffic via [GCP Packet Mirroring](https://cloud.google.com/vpc/docs/packet-mirroring) service. Throughout the demo, a breach and attack simulation software [Keysight Threat Simulator](https://www.keysight.com/us/en/products/network-security/breach-defense/threat-simulator.html) is used to create conditions resembling real malicious activities. The goals of the demo are:
 
 * Validate operational readiness and basic efficacy of a network security moniring tool.
-* Compare efficacy of [various tools](https://cloud.google.com/vpc/docs/packet-mirroring-partners) against identical attack scenarious - as more tools are added to the demo.
+* Compare efficacy of [various tools](https://cloud.google.com/vpc/docs/packet-mirroring-partners) against identical attack scenarious -- as more tools are added to the demo.
 * Fine tune configuration of the tool to increace its efficacy.
 
-In this iteration of the demo, a combination of the following security monitoring products is being tested:
+In this iteration of the demo, a combination of the following security monitoring products is being validated:
 
 * [Palo Alto Networks vm-series firewall](https://console.cloud.google.com/marketplace/product/paloaltonetworksgcp-public/vmseries-flex-bundle1) acting as an [IDS](https://live.paloaltonetworks.com/t5/blogs/vm-series-now-integrates-with-gcp-packet-mirroring/ba-p/302784), and
 * [Splunk Enterprise](https://www.splunk.com/en_us/software/splunk-enterprise.html) log data indexing solution acting as a [SIEM](https://en.wikipedia.org/wiki/Security_information_and_event_management).
@@ -19,7 +19,7 @@ In this iteration of the demo, a combination of the following security monitorin
 
 ## IMPORTANT! Adopting command syntax to your environment
 
-1. Throughout the document, a parameter ````--project=kt-nas-demo```` with GCP Project ID is used for ````gcloud```` command syntax. Please change ````kt-nas-demo```` to specify a GCP Project ID you intend to use for the deployment
+1. Throughout the document, a CP Project ID parameter ````--project=kt-nas-demo```` is used for ````gcloud```` command syntax. Please change ````kt-nas-demo```` to specify a GCP Project ID you intend to use for the deployment
 2. Where applicable, GCP Region ````us-west1```` (Oregon) and/or Zone ````us-west1-b```` are used withing the document. Consider changing to a region and zone that fit your deployment via ````--region=us-west1```` and ````--zone=us-west1-b```` parameters.
 
 ## GCP VPC Configuration
@@ -427,19 +427,12 @@ gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-packet-mirror
 
 4. In PAN IDS configuration, add a loopback.1 interface with an IP address assiged as a Frontend Internal IP in the previous step. Add loopback.1 to a virtual router configuration. Create static routes for the following health-check IP address ranges: ````35.191.0.0/16,130.211.0.0/22```` pointing to a default gateway in the subnet of ````Ethenet1/1```` interface: ````192.168.202.1````
 
-## AUX
+## Addendum
 
-### Permit SSH via Browser
-Default VPC
+### Permit SSH via browser
+See [https://cloud.google.com/iap/docs/using-tcp-forwarding](https://cloud.google.com/iap/docs/using-tcp-forwarding) for more information.
 
 ```Shell
 gcloud compute --project=kt-nas-demo firewall-rules create allow-ssh-from-browser-default-vpc --description="https://cloud.google.com/iap/docs/using-tcp-forwarding" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:22 --source-ranges=35.235.240.0/20
-```
-
-ts-demo-vpc VPC
-
-```Shell
 gcloud compute --project=kt-nas-demo firewall-rules create allow-ssh-from-browser-ts-demo-vpc --description="https://cloud.google.com/iap/docs/using-tcp-forwarding" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=tcp:22 --source-ranges=35.235.240.0/20
 ```
-
-
