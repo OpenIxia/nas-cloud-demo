@@ -22,18 +22,6 @@ In this iteration of the demo, a combination of the following security monitorin
 
 1. Create a demo VPC for Threat Simulator agent and IDS deployment. If needed, change IP address ranges to fit your design.
 
-```
-Name: ts-demo-vpc
-Description: ThreatSim Demo
-Subnets: custom
-  Name: ts-demo-app-subnet
-  Region: us-west1
-    IP address range: 192.168.201.0/24
-  Name: ts-demo-ids-subnet
-  Region: us-west1
-    IP address range: 192.168.202.0/24
-```
-
 | Parameter 						| Value
 | --- 									| ---
 | Name 									| `ts-demo-vpc`
@@ -52,16 +40,16 @@ gcloud compute networks subnets create ts-demo-app-subnet --project=kt-nas-demo 
 gcloud compute networks subnets create ts-demo-ids-subnet --project=kt-nas-demo --range=192.168.202.0/24 --network=ts-demo-vpc --region=us-west1
 ```
 
-  For successful PAN deployment, we need another VPC to be on "trusted" security zone side on the PAN instance. It will not be used in any other way.
+For successful PAN deployment, we need another VPC to be on "trusted" security zone side on the PAN instance. It will not be used in any other way.
 
-```
-Name: ts-pan-trust-vpc
-Description: ThreatSim Demo - Palo Alto Trusted NIC VPC
-Subnets: custom
-	Name: ts-pan-trust-subnet
-		Region: us-west1
-		IP address range: 192.168.203.0/24
-```
+| Parameter 						| Value
+| --- 									| ---
+| Name 									| `ts-pan-trust-vpc`
+| Description 					| ThreatSim Demo - Palo Alto Trusted NIC VPC
+| Subnets 							| custom
+| &nbsp;&nbsp;&nbsp;&nbsp;Name 								| `ts-pan-trust-subnet`
+| &nbsp;&nbsp;&nbsp;&nbsp;Region 							| us-west1
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP address range 	| `192.168.203.0/24`
 
 ```Shell
 gcloud compute networks create ts-pan-trust-vpc --project=kt-nas-demo --description="ThreatSim Demo - Palo Alto Trusted NIC VPC" --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional
@@ -74,7 +62,6 @@ gcloud compute networks subnets create ts-pan-trust-subnet --project=kt-nas-demo
 gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-allow-http --description="Allow http ingress to any instance tagged as http-server" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags=http-server
 gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-allow-https --description="Allow https ingress to any instance tagged as https-server" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=tcp:443 --source-ranges=0.0.0.0/0 --target-tags=https-server
 ```
-
 
 ## Threat Simulator Workload Deployment
 
