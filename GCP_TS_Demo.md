@@ -34,7 +34,7 @@ Subnets: custom
     IP address range: 192.168.202.0/24
 ```
 
-```
+```Shell
 gcloud compute networks create ts-demo-vpc --project=kt-nas-demo --description="ThreatSim Demo" --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional
 gcloud compute networks subnets create ts-demo-app-subnet --project=kt-nas-demo --range=192.168.201.0/24 --network=ts-demo-vpc --region=us-west1
 gcloud compute networks subnets create ts-demo-ids-subnet --project=kt-nas-demo --range=192.168.202.0/24 --network=ts-demo-vpc --region=us-west1
@@ -51,14 +51,14 @@ Subnets: custom
 		IP address range: 192.168.203.0/24
 ```
 
-```
+```Shell
 gcloud compute networks create ts-pan-trust-vpc --project=kt-nas-demo --description="ThreatSim Demo - Palo Alto Trusted NIC VPC" --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional
 gcloud compute networks subnets create ts-pan-trust-subnet --project=kt-nas-demo --range=192.168.203.0/24 --network=ts-pan-trust-vpc --region=us-west1
 ```
 
 2. Create VPC Firewall rules in ````ts-demo-vpc```` to permit HTTP and HTTPS traffic to any target tagged as ````http-server```` and ````https-server````
 
-```
+```Shell
 gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-allow-http --description="Allow http ingress to any instance tagged as http-server" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags=http-server
 gcloud compute --project=kt-nas-demo firewall-rules create ts-demo-allow-https --description="Allow https ingress to any instance tagged as https-server" --direction=INGRESS --priority=1000 --network=ts-demo-vpc --action=ALLOW --rules=tcp:443 --source-ranges=0.0.0.0/0 --target-tags=https-server
 ```
@@ -91,7 +91,7 @@ curl "https://api.threatsimulator.cloud/agent/download?OrganizationID=1234567890
 [//]: # (--shielded-vtpm \)
 [//]: # (--shielded-integrity-monitoring \)
 
-```
+```Shell
 gcloud compute instances create ts-workload-1 \
 --zone=us-west1-b \
 --machine-type=e2-small \
