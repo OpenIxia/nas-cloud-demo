@@ -385,22 +385,22 @@ gcloud compute firewall-rules create fw-allow-health-checks \
 | Mirrored source and destinations are in the same VPC network	| `ts-demo-vpc`
 | Mirrored source - Select with network tags										| `ts-agent`
 | Mirrored destination																					| Create new L4 internal load balancer
-| 	Name																												| `ts-demo-pan-ids-ilb`
-| 	Backend configuration |
-| 		Region																										| us-west1
-| 		Network																										| `ts-demo-vpc`
-| 		Backends instance Group																		| `pan-ids-ig`
-| 		Health check																							| `ssh-health-check`
-| 	Frontend configuration |
-| 		Name																											| `ts-demo-pan-ids-ilb-fe`
-| 		Subnetwork																								| `ts-demo-ids-subnet`
-| 		Internal IP |
-| 			Purpose																									| Non-shared
-| 			IP address																							| Static internal IP address
-| 				Name																									| `ts-demo-pan-ids-ilb-fe-ip`
-| 				Address																								| Assign automatically
-| 		Global access																							| Disable
-| 		Packet mirroring (advanced configuration)									| Enable this load balancer for Packet Mirroring
+| &nbsp;&nbsp;&nbsp;&nbsp;Name																												| `ts-demo-pan-ids-ilb`
+| &nbsp;&nbsp;&nbsp;&nbsp;Backend configuration |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Region																										| us-west1
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Network																										| `ts-demo-vpc`
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Backends instance Group																		| `pan-ids-ig`
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Health check																							| `ssh-health-check`
+| &nbsp;&nbsp;&nbsp;&nbsp;Frontend configuration |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name																											| `ts-demo-pan-ids-ilb-fe`
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subnetwork																								| `ts-demo-ids-subnet`
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Internal IP |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Purpose														| Non-shared
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP address												| Static internal IP address
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name			| `ts-demo-pan-ids-ilb-fe-ip`
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Address		| Assign automatically
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Global access																							| Disable
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Packet mirroring (advanced configuration)									| Enable this load balancer for Packet Mirroring
 | Collector destination																					| `ts-demo-pan-ids-ilb-fe`
 | Select mirrored traffic																				| Mirror all traffic
 
