@@ -317,16 +317,16 @@ EOF
 | SSH Key																															| `<admin:ssh-rsa ADD PUBLIC SSH KEY HERE>`
 | Networking (VPCs and subnets must be pre-created)
 | nic0 - Untrust (IDS) |
-| &nbsp;&nbsp;&nbsp;&nbsp;Network																			| ts-demo-vpc
-| &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork 																	| ts-demo-ids-subnet
+| &nbsp;&nbsp;&nbsp;&nbsp;Network																			| `ts-demo-vpc`
+| &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork 																	| `ts-demo-ids-subnet`
 | &nbsp;&nbsp;&nbsp;&nbsp;Enable External IP for Management inteface	| No
 | nic1 - Management |
-| &nbsp;&nbsp;&nbsp;&nbsp;Network																			| default
-| &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork																	| default
+| &nbsp;&nbsp;&nbsp;&nbsp;Network																			| `default`
+| &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork																	| `default`
 | &nbsp;&nbsp;&nbsp;&nbsp;Enable External IP for Untrust							| Yes
 | nic2 - Trust (not used) |
-| &nbsp;&nbsp;&nbsp;&nbsp;Network																			| ts-pan-trust-vpc
-| &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork																	| ts-pan-trust-subnet
+| &nbsp;&nbsp;&nbsp;&nbsp;Network																			| `ts-pan-trust-vpc`
+| &nbsp;&nbsp;&nbsp;&nbsp;Subnetwork																	| `ts-pan-trust-subnet`
 | &nbsp;&nbsp;&nbsp;&nbsp;Enable External IP for Trust								| No
 
 See https://docs.paloaltonetworks.com/vm-series/9-1/vm-series-deployment/set-up-the-vm-series-firewall-on-google-cloud-platform/prepare-to-set-up-the-vm-series-firewall-on-a-google-instance.html#id1819C02I0AS_id821c495f-3ff8-488d-ab61-28692ab1ce26
