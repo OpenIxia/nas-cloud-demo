@@ -76,7 +76,7 @@ gcloud compute --project=kt-nas-demo firewall-rules create allow-ssh-from-browse
 
 ## Threat Simulator Workload Deployment
 
-1. If you do not have an active Threat Simulator account, request an evaluation access at [https://threatsimulator.cloud/login](https://threatsimulator.cloud/login)
+1. If you do not have an active Threat Simulator account, request evaluation access at [https://threatsimulator.cloud/login](https://threatsimulator.cloud/login)
 2. Once the eval is approved, login to [Theat Simulator console](https://threatsimulator.cloud/login), navigate to Deployment page, and open "Anywhere" for a deployment type
 3. Scroll down to AGENT INSTALLATION to a CURL command line, which looks similar to the following. In your case, there will be a different `OrganizationID`. Agent version would vary with time as well.
 
