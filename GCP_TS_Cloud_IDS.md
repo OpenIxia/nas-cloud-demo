@@ -124,7 +124,7 @@ Click “Create”: This creates the IDS endpoint and this step could take 10-15
 | Name																													| `ts-demo-ids-mirror`
 | Region																												| us-central1
 | Policy enforcement																						| Enabled
-| Mirrored source - Select with network tags										| `ts-agent`
+| Mirrored source - Select with network tags										| `cids-mirror`
 | Select mirrored traffic																				| Mirror all traffic
 
 ## Threat Simulator Workload Deployment
@@ -163,7 +163,7 @@ gcloud compute instances create ts-demo-workload-usc1a \
 --image-project=ubuntu-os-cloud \
 --boot-disk-size=10GB \
 --boot-disk-device-name=ts-demo-workload-usc1a \
---tags=ts-agent,http-server,https-server \
+--tags=ts-agent,http-server,https-server,cids-mirror \
 --metadata=startup-script='#!/bin/bash -xe
 if [ ! -f /home/threatsim/.tsinstalled ]; then
 	sysctl -w net.ipv6.conf.all.disable_ipv6=1
