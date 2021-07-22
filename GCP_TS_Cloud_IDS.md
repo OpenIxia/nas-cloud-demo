@@ -184,7 +184,7 @@ fi'
 ## Simulate Malitious Activity
 
 1. Login to Threat Simulator web interface [https://threatsimulator.cloud/](https://threatsimulator.cloud/)
-2. Navigate to Assesment tab, enter "CISA" in assesment fiter
+2. Navigate to Assesment tab, enter "CISA" in the assesment filter
 3. Locate an assesment named "CISA Top 10, 2016-2019 Server Attacks", and launch a new scenario form from it:
 
 ![Creating a scenario from an assesment](images/Threat_Simulator_CISA_Top10_Server.png)
@@ -198,4 +198,7 @@ fi'
 
 ![Audit Results](images/Threat_Simulator_CISA_Top10_Server_Audit_Results.png)
 
+8. Cloud IDS should be able to detect each threat from the scenario:
+
+![Cloud IDS Threats Reporting](images/Cloud_IDS_CISA_Top10_Server_Threats.png)
 
