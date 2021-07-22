@@ -11,7 +11,7 @@ The demo is targeting a passive network detection and response (NDR) scenario wi
 
 ## Diagram
 
-![GCP Cloud IDS Demo Diagram](diagrams/GCP_TS_Demo_CloudIDS.png)
+![GCP Cloud IDS Demo Diagram](diagrams/GCP_TS_Demo_Cloud_IDS.png)
 
 ## Adopting command syntax to your environment
 
