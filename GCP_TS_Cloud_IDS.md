@@ -2,16 +2,16 @@
 
 ## Overview
 
-The demo is targeting passive network detection and response (NDR) scenario using [Cloud IDS](https://cloud.google.com/ids) service in [Google Compute Cloud (GCP)](https://cloud.google.com/) environment. Throughout the demo, a breach and attack simulation software [Keysight Threat Simulator](https://www.keysight.com/us/en/products/network-security/breach-defense/threat-simulator.html) is used to create conditions resembling real malicious activities. The goals of the demo are:
+The demo is targeting a passive network detection and response (NDR) scenario with [Cloud IDS](https://cloud.google.com/ids) service in [Google Compute Cloud (GCP)](https://cloud.google.com/) environment. Throughout the demo, a breach and attack simulation software [Keysight Threat Simulator](https://www.keysight.com/us/en/products/network-security/breach-defense/threat-simulator.html) is used to create conditions resembling real malicious activities. The goals of the demo are:
 
 * Demonstrate Cloud IDS capabilities in detecting threats.
-* Create a sandbox environment for evaluate efficacy of the Cloud IDS against various attack scenarious.
-* Provide a framework for monitoring operational readiness and basic efficacy of the Cloud IDS in your environment.
+* Create a sandbox environment for evaluate efficacy of Cloud IDS against various attack scenarious.
+* Provide a framework for monitoring operational readiness and basic efficacy of Cloud IDS in your environment.
 * Fascilitate integration efforts to ingest and process Cloud IDS alerts by downstream SIEM tools.
 
-## Diagram - TODO CIDS
+## Diagram
 
-![GCP Cloud Security Monitoring Demo Diagram](diagrams/GCP_TS_Demo_PAN.png)
+![GCP Cloud IDS Demo Diagram](diagrams/GCP_TS_Demo_CloudIDS.png)
 
 ## Adopting command syntax to your environment
 
