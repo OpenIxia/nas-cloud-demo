@@ -202,3 +202,6 @@ fi'
 
 ![Cloud IDS Threats Reporting](images/Cloud_IDS_CISA_Top10_Server_Threats.png)
 
+## Next Steps
+
+Now you have a sandbox environment to validate if threat vectors that are relevant to your environment could be effectively detected by Cloud IDS. Explore Threat Simulator assesments library to identify those of interest and run them against Cloud IDS. Note, that some assesments use ports that were not previously permitted. You would need to adjust your GCP Firewall rules to allow them.
