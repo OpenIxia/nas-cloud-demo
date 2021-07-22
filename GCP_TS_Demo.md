@@ -350,10 +350,10 @@ See https://docs.paloaltonetworks.com/vm-series/9-1/vm-series-deployment/set-up-
 gcloud compute --project=kt-nas-demo firewall-rules create ts-pan-mgmt --description="PAN Management" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:443,tcp:22 --source-ranges=0.0.0.0/0 --target-tags=pan-security
 ```
 		
-5. Connect via SSH to the PAN IDS instance, setup admin password
+5. Connect via SSH to the PAN IDS instance, setup admin password (if you see a password prompt when connecting over SSH, disconnect and wait before connecting again - you should be able connect without a password)
 
 ```Shell
-ssh -i google_compute_engine admin@<pan_workload_ip_address>
+ssh -i <ssh_rsa_private_key> admin@<pan_workload_ip_address>
 configure
 set mgt-config users admin password
 commit
