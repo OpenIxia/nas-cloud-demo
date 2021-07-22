@@ -181,6 +181,21 @@ fi'
 		
 5. After about 5 minutes the Threat Simulator workload should appear in Threat Simulator UI under [Agents](https://threatsimulator.cloud/security/agent) section
 
+## Simulate Malitious Activity
 
-[//]: # (This is enough to run a TS assesment and manually observe threats in GCP Cloud IDS console or Log Explorer)
+1. Login to Threat Simulator web interface [https://threatsimulator.cloud/](https://threatsimulator.cloud/)
+2. Navigate to Assesment tab, enter "CISA" in assesment fiter
+3. Locate an assesment named "CISA Top 10, 2016-2019 Server Attacks", and launch a new scenario form from it:
+
+![Creating a scenario from an assesment](images/Threat_Simulator_CISA_Top10_Server.png)
+
+4. On the Create Scenario form, for Step 2, select a Threat Simulator agent you previously deployed as "GCP-Cloud-IDS-Demo-1"
+5. Click Advanced and change a protocol from default HTTPS to HTTP (port 80)
+6. Name the scenario as "GCP-Cloud-IDS-CISA-Top10-Server" and click "Add and Run Scenario"
+7. As the scenario is being executed, monitor Cloud IDS alarms and compare them with audits executed by Threat Simulator on Dashboard tab:
+
+![Scenarios Dashboard](images/Threat_Simulator_CISA_Top10_Server_Dashboard.png)
+
+![Audit Results](images/Threat_Simulator_CISA_Top10_Server_Audit_Results.png)
+
 
