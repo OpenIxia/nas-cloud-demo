@@ -181,7 +181,7 @@ fi'
 		
 5. After about 5 minutes the Threat Simulator workload should appear in Threat Simulator UI under [Agents](https://threatsimulator.cloud/security/agent) section
 
-## Simulate Malitious Activity
+## Simulate Malicious Activity
 
 1. Login to Threat Simulator web interface [https://threatsimulator.cloud/](https://threatsimulator.cloud/)
 2. Navigate to Assesment tab, enter "CISA" in the assesment filter
