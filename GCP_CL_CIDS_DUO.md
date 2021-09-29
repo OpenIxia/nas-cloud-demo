@@ -118,7 +118,6 @@ gcloud compute instances create ts-workload-cl-1 \
 --zone=us-central1-a \
 --machine-type=e2-small \
 --subnet=nas-sandbox-app-subnet \
---no-address \
 --image-family=ubuntu-2004-lts \
 --image-project=ubuntu-os-cloud \
 --boot-disk-size=10GB \
@@ -142,5 +141,141 @@ if [ ! -f /home/threatsim/.tsinstalled ]; then
 	if [ `docker ps -qf name=ts-filebeat | wc -l` -ge 1 ]; then touch /home/threatsim/.tsinstalled; fi
 fi'
 ```
-		
+
 5. After about 5 minutes the Threat Simulator workload should appear in Threat Simulator UI under [Agents](https://threatsimulator.cloud/security/agent) section
+
+## CloudLens Manager Deployment
+
+[//]: # (commented out Follow steps from [CloudLens Manager deployment section](https://github.com/OpenIxia/gcp-cloudlens/blob/main/DEPLOY.md#deploying-cloudlens-manager) applicable to Google Cloud.)
+
+1. Deploy an Ubuntu instance for CloudLens Manager in a default VPC
+
+[//]: # (TODO static public IP address)
+
+```Shell
+gcloud compute instances create cl-manager-usc1-1 \
+--zone=us-central1-a \
+--machine-type=e2-standard-4 \
+--subnet=default \
+--image-family=ubuntu-1804-lts \
+--image-project=ubuntu-os-cloud \
+--boot-disk-size=100GB \
+--boot-disk-device-name=cl-manager-usc1-1 \
+--tags=cl-manager,https-server
+```
+
+2. Copy Cloudlens Manager universal installer script to the instance. You can download CloudLens Manager from [Ixia/Keysight support website](https://support.ixiacom.com/support-overview/product-support/downloads-updates/versions/228985)
+
+[//]: # (TODO need unauthenticated access for this cookbook to be of any value)
+
+
+```Shell
+gcloud compute scp CloudLens-Installer-6.0.2-3.sh cl-manager-usc1-1:
+````
+
+3. Connect to the instance via SSH and install CloudLens Manager
+
+```Shell
+gcloud compute ssh cl-manager-usc1-1
+bash CloudLens-Installer-6.0.2-3.sh
+````
+
+4. Record a public IP of the CloudLens Manager instance, which would be refered as `clm_public_ip` further in this document
+
+```Shell
+gcloud compute instances describe cl-manager-usc1-1 --format='get(networkInterfaces[0].accessConfigs[0].natIP)'
+````
+
+4. To access CloudLens Manager, open a web browser and enter `https://clm_public_ip` in the URL field. It may take up some time for CloudLens Manager Web UI to initialize
+
+The default credentials for the CloudLens admin account are as follows. After first login you will be asked to change the password.
+
+  * Username admin
+  * Password Cl0udLens@dm!n
+
+5. In CloudLens Manager admin UI, section "Remote Access URL", change private IP address to `clm_public_ip`
+
+6. Logout from admin session and choose "Create User" with parameters of your liking. Login with identity of the newly created user.
+
+7. Add CloudLens license via "Settings > Account Management"
+[//]: # (TODO we need a self-served trial capabilities here, probably enabled by default - see Splunk eval model)
+
+8. Choose "I already have a project", and then create a project by clicking ‘+’. Use any project name you see fit. Open the project. Click "SHOW PROJECT KEY" and copy the key.
+
+9. Deploy a pair of Ubuntu instance as CloudLens Collectors in a `nas-sandbox-vpc`. We are going to use these instances to collect network traffic using Packet Mirroring service from the Threat Simulator instance. In `--metadata` section in each, replace `cloudlens_project_key` with the project key that was copied in the previous slot. Replace `clm_public_ip` as well, there are three occurances in each block.
+
+```Shell
+gcloud compute instances create cl-collector-usc1-sandbox-1 \
+--zone=us-central1-a \
+--machine-type=e2-medium \
+--subnet=nas-sandbox-collector-subnet \
+--image-family=ubuntu-1804-lts \
+--image-project=ubuntu-os-cloud \
+--boot-disk-size=10GB \
+--boot-disk-device-name=cl-collector-usc1-sandbox-1 \
+--tags=cl-collector \
+--scopes=https://www.googleapis.com/auth/compute.readonly,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/trace.append,https://www.googleapis.com/auth/devstorage.read_only \
+--metadata=startup-script='#!/bin/bash -xe
+if [ ! -f /root/.cl-collector-installed ]; then
+  mkdir /etc/docker
+  cat >> /etc/docker/daemon.json << EOF
+{"insecure-registries":["clm_public_ip"]}
+EOF
+  apt-get update -y
+  apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - 
+  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  apt-get update -y
+  apt-get install docker-ce docker-ce-cli containerd.io -y
+  docker run -v /var/log:/var/log/cloudlens -v /:/host -v /var/run/docker.sock:/var/run/docker.sock -v /lib/modules:/lib/modules --privileged --name cloudlens-agent -d --restart=on-failure --net=host --log-opt max-size=50m --log-opt max-file=3 clm_public_ip/sensor --accept_eula yes --runmode collector --ssl_verify no --project_key cloudlens_project_key --server clm_public_ip
+  if [ `docker ps -qf name=cloudlens-agent | wc -l` -ge 1 ]; then touch /root/.cl-collector-installed; fi
+fi'
+```
+
+
+```Shell
+gcloud compute instances create cl-collector-usc1-sandbox-2 \
+--zone=us-central1-a \
+--machine-type=e2-medium \
+--subnet=nas-sandbox-collector-subnet \
+--image-family=ubuntu-1804-lts \
+--image-project=ubuntu-os-cloud \
+--boot-disk-size=10GB \
+--boot-disk-device-name=cl-collector-usc1-sandbox-2 \
+--tags=cl-collector \
+--scopes=https://www.googleapis.com/auth/compute.readonly,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/trace.append,https://www.googleapis.com/auth/devstorage.read_only \
+--metadata=startup-script='#!/bin/bash -xe
+if [ ! -f /root/.cl-collector-installed ]; then
+  mkdir /etc/docker
+  cat >> /etc/docker/daemon.json << EOF
+{"insecure-registries":["clm_public_ip"]}
+EOF
+  apt-get update -y
+  apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - 
+  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  apt-get update -y
+  apt-get install docker-ce docker-ce-cli containerd.io -y
+  docker run -v /var/log:/var/log/cloudlens -v /:/host -v /var/run/docker.sock:/var/run/docker.sock -v /lib/modules:/lib/modules --privileged --name cloudlens-agent -d --restart=on-failure --net=host --log-opt max-size=50m --log-opt max-file=3 clm_public_ip/sensor --accept_eula yes --runmode collector --ssl_verify no --project_key cloudlens_project_key --server clm_public_ip
+  if [ `docker ps -qf name=cloudlens-agent | wc -l` -ge 1 ]; then touch /root/.cl-collector-installed; fi
+fi'
+```
+
+
+///9. Choose "Launch Agent", and click "Collector Deploy Guide" URL. In the section "Install Google CloudLens Collector", scroll down to "Install and start CloudLens agent" section and select the project you created on the previous step in the "Project Key" dropdown list. Uncheck "SSL Verify Enabled" for the purposes of this example. Copy the text from the "Startup Script" text area.
+
+10. Open Google Cloud Console and Activate Cloud Shell. Download Packet Mirroring configuration script from CloudLens Manager and create a Packet Mirroring session
+
+```Shell
+wget --no-check-certificate https://clm_public_ip/cloudlens/static/scripts/google/gcp_packetmirroring_cli.py
+python3 gcp_packetmirroring_cli.py --action create --region us-central1 --project kt-nas-demo --collector cl-collector-usc1-sandbox-1 --mirrored-instances ts-workload-cl-1
+````
+
+python3 gcp_packetmirroring_cli.py --action delete --region us-central1 --project kt-nas-demo --collector cl-collector-usc1-sandbox-1
+
+
+gcloud auth application-default login
+pip install --upgrade google-api-python-client
+
+
+11. 
