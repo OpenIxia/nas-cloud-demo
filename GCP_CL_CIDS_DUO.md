@@ -186,6 +186,13 @@ bash CloudLens-Installer-6.0.2-3.sh
 gcloud compute instances describe cl-manager-usc1-1 --format='get(networkInterfaces[0].accessConfigs[0].natIP)'
 ````
 
+5. (Optional) Create a DNS entry for `clm_public_ip`. Here we're using `gcp-clm-usc.ixlab.org` hosted on AWS Route 53. Once we have a DNS entry, create a TLS certificate the DNS record.
+
+```Shell
+export AWS_CONFIG_FILE=$HOME/certbot/etc/route53.cfg
+certbot --config-dir ~/certbot/etc --work-dir ~/certbot/var --logs-dir ~/certbot/log   certonly --dns-route53 -d gcp-clm-usc.ixlab.org
+````
+
 4. To access CloudLens Manager, open a web browser and enter `https://clm_public_ip` in the URL field. It may take up some time for CloudLens Manager Web UI to initialize
 
 The default credentials for the CloudLens admin account are as follows. After first login you will be asked to change the password.
@@ -193,7 +200,7 @@ The default credentials for the CloudLens admin account are as follows. After fi
   * Username admin
   * Password Cl0udLens@dm!n
 
-5. In CloudLens Manager admin UI, section "Remote Access URL", change private IP address to `clm_public_ip`
+5. In CloudLens Manager admin UI, section "Remote Access URL", change private IP address to `clm_public_ip` or corresponding DNS entry. If you created a TLS cerficicate, upload it via "Import TLS Certificate" section. Use `fullchain1.pem` certificate, if you created it with certbot (Let's Encrypt).
 
 6. Logout from admin session and choose "Create User" with parameters of your liking. Login with identity of the newly created user.
 
@@ -202,7 +209,9 @@ The default credentials for the CloudLens admin account are as follows. After fi
 
 8. Choose "I already have a project", and then create a project by clicking ‘+’. Use any project name you see fit. Open the project. Click "SHOW PROJECT KEY" and copy the key.
 
-9. Deploy a pair of Ubuntu instance as CloudLens Collectors in a `nas-sandbox-vpc`. We are going to use these instances to collect network traffic using Packet Mirroring service from the Threat Simulator instance. In `--metadata` section in each, replace `cloudlens_project_key` with the project key that was copied in the previous slot. Replace `clm_public_ip` as well, there are three occurances in each block.
+## CloudLens Collector Deployment
+
+9. Deploy a pair of Ubuntu instance as CloudLens Collectors in a `nas-sandbox-vpc`. We are going to use these instances to collect network traffic using Packet Mirroring service from the Threat Simulator instance. In `--metadata` section in each, replace `cloudlens_project_key` with the project key that was copied in the previous step. Replace `clm_public_ip` as well, there are three occurances in each block.
 
 ```Shell
 gcloud compute instances create cl-collector-usc1-sandbox-1 \
@@ -271,11 +280,41 @@ wget --no-check-certificate https://clm_public_ip/cloudlens/static/scripts/googl
 python3 gcp_packetmirroring_cli.py --action create --region us-central1 --project kt-nas-demo --collector cl-collector-usc1-sandbox-1 --mirrored-instances ts-workload-cl-1
 ````
 
+If any failures are encountered during Packet Mirroring setup, to cleanup configuration, please use
+
+```Shell
 python3 gcp_packetmirroring_cli.py --action delete --region us-central1 --project kt-nas-demo --collector cl-collector-usc1-sandbox-1
+````
+
+## Third Party Network Traffic Sensor Deployment
 
 
-gcloud auth application-default login
-pip install --upgrade google-api-python-client
+1. Deploy an Ubuntu instance with CloudLens Agent to work as a 3rd party network traffic sensor, in a `default` VPC. In `--metadata` section in each, replace `cloudlens_project_key` with the project key that was copied previously. Replace `clm_public_ip` as well, there are three occurances in each block.
 
+```Shell
+gcloud compute instances create cl-tool-1 \
+--zone=us-central1-a \
+--machine-type=e2-medium \
+--subnet=default \
+--image-family=ubuntu-1804-lts \
+--image-project=ubuntu-os-cloud \
+--boot-disk-size=10GB \
+--boot-disk-device-name=cl-tool-1 \
+--tags=cl-tool \
+--metadata=startup-script='#!/bin/bash -xe
+if [ ! -f /root/.cl-agent-installed ]; then
+  mkdir /etc/docker
+  cat >> /etc/docker/daemon.json << EOF
+{"insecure-registries":["clm_public_ip"]}
+EOF
+  apt-get update -y
+  apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - 
+  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  apt-get update -y
+  apt-get install docker-ce docker-ce-cli containerd.io -y
+  docker run -v /var/log:/var/log/cloudlens -v /:/host -v /var/run/docker.sock:/var/run/docker.sock -v /lib/modules:/lib/modules --privileged --name cloudlens-agent -d --restart=on-failure --net=host --log-opt max-size=50m --log-opt max-file=3 clm_public_ip/sensor --accept_eula yes --runmode collector --ssl_verify no --project_key cloudlens_project_key --server clm_public_ip
+  if [ `docker ps -qf name=cloudlens-agent | wc -l` -ge 1 ]; then touch /root/.cl-agent-installed; fi
+fi'
+```
 
-11. 
