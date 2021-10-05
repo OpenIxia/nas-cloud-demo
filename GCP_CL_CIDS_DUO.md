@@ -170,20 +170,22 @@ gcloud compute instances create cl-manager-usc1-1 \
 
 
 ```Shell
-gcloud compute scp CloudLens-Installer-6.0.2-3.sh cl-manager-usc1-1:
+gcloud compute scp CloudLens-Installer-6.0.2-4.sh cl-manager-usc1-1:
 ````
 
 3. Connect to the instance via SSH and install CloudLens Manager
 
+[//]: # (TODO need a way to run this in batch mode, preferably from user-data startup script. Currently, the error pops "tput: No value for $TERM and no -T specified")
+
 ```Shell
 gcloud compute ssh cl-manager-usc1-1
-bash CloudLens-Installer-6.0.2-3.sh
+bash CloudLens-Installer-6.0.2-4.sh
 ````
 
 4. Record a public IP of the CloudLens Manager instance, which would be refered as `clm_public_ip` further in this document
 
 ```Shell
-gcloud compute instances describe cl-manager-usc1-1 --format='get(networkInterfaces[0].accessConfigs[0].natIP)'
+export clm_public_ip=`gcloud compute instances describe cl-manager-usc1-1 --format='get(networkInterfaces[0].accessConfigs[0].natIP)'`; echo $clm_public_ip
 ````
 
 5. (Optional) Create a DNS entry for `clm_public_ip`. Here we're using `gcp-clm-usc.ixlab.org` hosted on AWS Route 53. Once we have a DNS entry, create a TLS certificate the DNS record.
@@ -275,15 +277,17 @@ fi'
 
 10. Open Google Cloud Console and Activate Cloud Shell. Download Packet Mirroring configuration script from CloudLens Manager and create a Packet Mirroring session
 
+[//]: # (TODO there is a bug with collector that doesn't work if the mirror is created with `--mirrored-tags ts-agent`)
+
 ```Shell
 wget --no-check-certificate https://clm_public_ip/cloudlens/static/scripts/google/gcp_packetmirroring_cli.py
-python3 gcp_packetmirroring_cli.py --action create --region us-central1 --project kt-nas-demo --collector cl-collector-usc1-sandbox-1 --mirrored-instances ts-workload-cl-1
+python3 gcp_packetmirroring_cli.py --action create --region us-central1 --project kt-nas-demo --mirrored-network nas-sandbox-vpc --mirrored-instances ts-workload-cl-1 --collector cl-collector-usc1-sandbox-1 
 ````
 
 If any failures are encountered during Packet Mirroring setup, to cleanup configuration, please use
 
 ```Shell
-python3 gcp_packetmirroring_cli.py --action delete --region us-central1 --project kt-nas-demo --collector cl-collector-usc1-sandbox-1
+python3 gcp_packetmirroring_cli.py --action delete --region us-central1 --project kt-nas-demo --collector cl-collector-usc1-sandbox-1 --mirrored-network nas-sandbox-vpc
 ````
 
 ## Third Party Network Traffic Sensor Deployment
