@@ -322,3 +322,31 @@ EOF
 fi'
 ```
 
+
+## Cloud IDS Endpoint Deployment
+
+1. Create an IDS endpoint under Network Security > CLoud IDS by clicking on “Create Endpoint”
+
+| Parameter 					| Value
+| --- 							| ---
+| Endpoint name 				| `nas-sandbox-ids-usc1`
+| Description 					| IDS endpoint for nas-sandbox-vpc
+| Network 						| `nas-sandbox-vpc`
+| Region 						| `us-central1`
+| Region 						| `us-central1-a`
+| Minimum threat severity alert	| Informational
+| Traffic logs					| Off
+
+Click “Create”: This creates the IDS endpoint and this step could take 10-15 mins.
+
+2. Attach a Packet Mirroring policy to the IDS endpoint that will mirror traffic from CloudLens Collectors VPC and send it to the IDS endpoint. Make sure to filter traffic to IP addresses with workloads that need to be monitored, to avoid forwarding of CloudLens tunneled traffic to Cloud IDS.
+
+| Parameter 									| Value
+| ---											| ---
+| Name											| `nas-sandbox-ids-mirror`
+| Region										| us-central1
+| Policy enforcement							| Enabled
+| Mirrored source - Select with network tags	| `cl-collector`
+| Select mirrored traffic						| Mirror filtered traffic
+| Allow specific IP ranges						| 192.168.221.0/24
+
