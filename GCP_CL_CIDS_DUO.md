@@ -146,56 +146,43 @@ fi'
 
 ## CloudLens Manager Deployment
 
-[//]: # (commented out Follow steps from [CloudLens Manager deployment section](https://github.com/OpenIxia/gcp-cloudlens/blob/main/DEPLOY.md#deploying-cloudlens-manager) applicable to Google Cloud.)
+1. Download CloudLens Manager OVA from [Ixia Keysight Support website](https://support.ixiacom.com/support-overview/product-support/downloads-updates/versions/228985)
 
-1. Deploy an Ubuntu instance for CloudLens Manager in a default VPC
+2. Extract VMDK file from the OVA
+
+````
+tar xf CloudLens-6.0.2-3.ova
+````
+
+3. Follow steps from [CloudLens Manager deployment section](https://github.com/OpenIxia/gcp-cloudlens/blob/main/DEPLOY.md#deploying-cloudlens-manager) applicable to Google Cloud.) to create a Compute Engine Image for CloudLens Manager. In this guide, we created an image `cloudlens-manager-602-3`. Use the next step to create an actual instance
+
+4. Deploy an instance with CloudLens Manager in a default VPC using `cloudlens-manager-602-3` image
 
 [//]: # (TODO static public IP address)
 
-```Shell
-gcloud compute instances create cl-manager-usc1-1 \
+````
+gcloud compute instances create cl-manager-usc1-2-vmdk \
 --zone=us-central1-a \
 --machine-type=e2-standard-4 \
 --subnet=default \
---image-family=ubuntu-1804-lts \
---image-project=ubuntu-os-cloud \
---boot-disk-size=100GB \
---boot-disk-device-name=cl-manager-usc1-1 \
+--create-disk=auto-delete=yes,boot=yes,device-name=cl-manager-usc1-2-vmdk,image=projects/kt-nas-demo/global/images/cloudlens-manager-602-3,mode=rw,size=196 \
 --tags=cl-manager,https-server
-```
-
-2. Copy Cloudlens Manager universal installer script to the instance. You can download CloudLens Manager from [Ixia/Keysight support website](https://support.ixiacom.com/support-overview/product-support/downloads-updates/versions/228985)
-
-[//]: # (TODO need unauthenticated access for this cookbook to be of any value)
-
-
-```Shell
-gcloud compute scp CloudLens-Installer-6.0.2-4.sh cl-manager-usc1-1:
 ````
 
-3. Connect to the instance via SSH and install CloudLens Manager
-
-[//]: # (TODO need a way to run this in batch mode, preferably from user-data startup script. Currently, the error pops "tput: No value for $TERM and no -T specified")
+5. Record a public IP of the CloudLens Manager instance, which would be refered as `clm_public_ip` further in this document
 
 ```Shell
-gcloud compute ssh cl-manager-usc1-1
-bash CloudLens-Installer-6.0.2-4.sh
+export clm_public_ip=`gcloud compute instances describe cl-manager-usc1-2-vmdk --format='get(networkInterfaces[0].accessConfigs[0].natIP)'`; echo $clm_public_ip
 ````
 
-4. Record a public IP of the CloudLens Manager instance, which would be refered as `clm_public_ip` further in this document
-
-```Shell
-export clm_public_ip=`gcloud compute instances describe cl-manager-usc1-1 --format='get(networkInterfaces[0].accessConfigs[0].natIP)'`; echo $clm_public_ip
-````
-
-5. (Optional) Create a DNS entry for `clm_public_ip`. Here we're using `gcp-clm-usc.ixlab.org` hosted on AWS Route 53. Once we have a DNS entry, create a TLS certificate the DNS record.
+6. (Optional) Create a DNS entry for `clm_public_ip`. Here we're using `gcp-clm-usc.ixlab.org` hosted on AWS Route 53. Once we have a DNS entry, create a TLS certificate the DNS record.
 
 ```Shell
 export AWS_CONFIG_FILE=$HOME/certbot/etc/route53.cfg
 certbot --config-dir ~/certbot/etc --work-dir ~/certbot/var --logs-dir ~/certbot/log   certonly --dns-route53 -d gcp-clm-usc.ixlab.org
 ````
 
-4. To access CloudLens Manager, open a web browser and enter `https://clm_public_ip` in the URL field. It may take up some time for CloudLens Manager Web UI to initialize
+7. To access CloudLens Manager, open a web browser and enter `https://clm_public_ip` in the URL field. It may take up some time for CloudLens Manager Web UI to initialize
 
 The default credentials for the CloudLens admin account are as follows. After first login you will be asked to change the password.
 
@@ -290,38 +277,55 @@ If any failures are encountered during Packet Mirroring setup, to cleanup config
 python3 gcp_packetmirroring_cli.py --action delete --region us-central1 --project kt-nas-demo --collector cl-collector-usc1-sandbox-1 --mirrored-network nas-sandbox-vpc
 ````
 
-## Third Party Network Traffic Sensor Deployment
+11. Create firewall rules to permit mirrored traffic from monitored instances to CloudLens Collectors
 
-
-1. Deploy an Ubuntu instance with CloudLens Agent to work as a 3rd party network traffic sensor, in a `default` VPC. In `--metadata` section in each, replace `cloudlens_project_key` with the project key that was copied previously. Replace `clm_public_ip` as well, there are three occurances in each block.
+#TODO replace FR IP
+Egress from source instances. Use an IP address assiged as a Frontend Internal IP in the previous step as `--destination-ranges`.
 
 ```Shell
-gcloud compute instances create cl-tool-1 \
+gcloud compute --project=kt-nas-demo firewall-rules create nas-sandbox-packet-mirror-egress-cl --description="Packet mirroring egress from sources to CL Collectors" --direction=EGRESS --priority=1000 --network=nas-sandbox-vpc --action=ALLOW --rules=all --destination-ranges=192.168.222.16/32
+```
+
+Ingress to CloudLens Collectrs
+
+```Shell
+gcloud compute --project=kt-nas-demo firewall-rules create nas-sandbox-packet-mirror-ingress-cl --description="Packet mirrirong ingress traffic to CL Collectors" --direction=INGRESS --priority=1000 --network=nas-sandbox-vpc --action=ALLOW --rules=all --source-ranges=0.0.0.0/0 --target-tags=cl-collector
+```
+
+## Third Party Network Traffic Sensor Deployment
+
+1. Deploy an Ubuntu instance with CloudLens Agent to work as a 3rd party network traffic sensor, in a `nas-sandbox-collector-subnet` subnet. We are going to use VxLAN tunnel to deliver mirrored traffic to this tool
+
+```Shell
+gcloud compute instances create cl-tool-1-vxlan \
 --zone=us-central1-a \
 --machine-type=e2-medium \
---subnet=default \
+--subnet=nas-sandbox-collector-subnet \
 --image-family=ubuntu-1804-lts \
 --image-project=ubuntu-os-cloud \
 --boot-disk-size=10GB \
---boot-disk-device-name=cl-tool-1 \
---tags=cl-tool \
---metadata=startup-script='#!/bin/bash -xe
-if [ ! -f /root/.cl-agent-installed ]; then
-  mkdir /etc/docker
-  cat >> /etc/docker/daemon.json << EOF
-{"insecure-registries":["clm_public_ip"]}
-EOF
-  apt-get update -y
-  apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - 
-  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  apt-get update -y
-  apt-get install docker-ce docker-ce-cli containerd.io -y
-  docker run -v /var/log:/var/log/cloudlens -v /:/host -v /var/run/docker.sock:/var/run/docker.sock -v /lib/modules:/lib/modules --privileged --name cloudlens-agent -d --restart=on-failure --net=host --log-opt max-size=50m --log-opt max-file=3 clm_public_ip/sensor --accept_eula yes --runmode collector --ssl_verify no --project_key cloudlens_project_key --server clm_public_ip
-  if [ `docker ps -qf name=cloudlens-agent | wc -l` -ge 1 ]; then touch /root/.cl-agent-installed; fi
-fi'
+--boot-disk-device-name=cl-tool-1-vxlan \
+--tags=cl-tool
+````
+
+2. Create VPC Firewall rules in `nas-sandbox-vpc` to permit VxLAN traffic to any target tagged as `cl-tool` from CloudLens Collectors (`cl-collector`)
+
+```Shell
+gcloud compute --project=kt-nas-demo firewall-rules create nas-sandbox-allow-vxlan --description="Allow VxLAN ingress to any instance tagged as cl-tool" --direction=INGRESS --priority=1000 --network=nas-sandbox-vpc --action=ALLOW --rules=udp:4789 --source-tags=cl-collector --target-tags=cl-tool
 ```
 
+2. Record a private IP of the `cl-tool-1-vxlan` instance, which would be refered as `vxlan_destination_ip` further in this document
+
+```Shell
+export vxlan_destination_ip=`gcloud compute instances describe cl-tool-1-vxlan --format='get(networkInterfaces[0].networkIP)'`; echo $vxlan_destination_ip
+````
+
+## Create CloudLens Monitoring Policy
+
+1. Using CloudLens Web UI, for the project we created, define a static destination with an IP address `vxlan_destination_ip` and name `cl-tool-1-vxlan`
+2. Define a group with network tag `cl-tool-1-vxlan` as `Monitoring Tool`, of type Tool
+3. Define a group with network tags `http-server,https-server,ts-agent` as `ThreatSim Agents`, of type Instance Group
+4. Create a connection from `ThreatSim Agents` to `Monitoring Tool` with packet type `RAW`, encapsulation `VXLAN` and VNI `100`
 
 ## Cloud IDS Endpoint Deployment
 
@@ -350,3 +354,18 @@ Click “Create”: This creates the IDS endpoint and this step could take 10-15
 | Select mirrored traffic						| Mirror filtered traffic
 | Allow specific IP ranges						| 192.168.221.0/24
 
+
+This setup didn't work with Cloud IDS - no threats were detected.
+
+
+3. Attach a Packet Mirroring policy to the IDS endpoint that will mirror traffic from 3rd party tool and send it to the IDS endpoint.
+
+| Parameter 									| Value
+| ---											| ---
+| Name											| `nas-sandbox-tool-mirror`
+| Region										| us-central1
+| Policy enforcement							| Enabled
+| Mirrored source - Select with network tags	| `cl-tool`
+| Select mirrored traffic						| Mirror all traffic
+
+This setup didnt't work with Cloud IDS - no threats were detected.
