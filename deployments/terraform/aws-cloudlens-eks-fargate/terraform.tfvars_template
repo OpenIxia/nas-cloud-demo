@@ -1,0 +1,11 @@
+Profile = "default"
+Region = "us-east-1"
+Public1AvailabilityZone = "us-east-1a"
+Public2AvailabilityZone = "us-east-1b"
+Private1AvailabilityZone = "us-east-1a"
+Private2AvailabilityZone = "us-east-1b"
+ApiMaxRetries = 10
+UserEmailTag = "your@email.com"
+UserLoginTag = "yourname"
+ProjectTag = "cl-fg"
+InboundIPv4CidrBlock = "1.1.1.1/32"
