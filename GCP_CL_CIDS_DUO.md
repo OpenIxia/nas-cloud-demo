@@ -294,38 +294,47 @@ gcloud compute --project=kt-nas-demo firewall-rules create nas-sandbox-packet-mi
 
 ## Third Party Network Traffic Sensor Deployment
 
-1. Deploy an Ubuntu instance with CloudLens Agent to work as a 3rd party network traffic sensor, in a `nas-sandbox-collector-subnet` subnet. We are going to use VxLAN tunnel to deliver mirrored traffic to this tool
+1. Deploy an Ubuntu instance with CloudLens Agent to work as a 3rd party network traffic sensor, in a `nas-sandbox-collector-subnet` subnet. In `--metadata` section in each, replace `cloudlens_project_key` with the project key that was copied in the previous step. Replace `clm_public_ip` as well, there are three occurances in each block.
 
 ```Shell
-gcloud compute instances create cl-tool-1-vxlan \
+gcloud compute instances create cl-tool-1 \
 --zone=us-central1-a \
 --machine-type=e2-medium \
 --subnet=nas-sandbox-collector-subnet \
 --image-family=ubuntu-1804-lts \
 --image-project=ubuntu-os-cloud \
 --boot-disk-size=10GB \
---boot-disk-device-name=cl-tool-1-vxlan \
---tags=cl-tool
+--boot-disk-device-name=cl-tool-1 \
+--tags=cl-tool \
+--metadata=startup-script='#!/bin/bash -xe
+if [ ! -f /root/.cl-collector-installed ]; then
+  mkdir /etc/docker
+  cat >> /etc/docker/daemon.json << EOF
+{"insecure-registries":["clm_public_ip"]}
+EOF
+  apt-get update -y
+  apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - 
+  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  apt-get update -y
+  apt-get install docker-ce docker-ce-cli containerd.io -y
+  docker run -v /var/log:/var/log/cloudlens -v /:/host -v /var/run/docker.sock:/var/run/docker.sock -v /lib/modules:/lib/modules --privileged --name cloudlens-agent -d --restart=on-failure --net=host --log-opt max-size=50m --log-opt max-file=3 clm_public_ip/sensor --accept_eula yes --ssl_verify no --project_key cloudlens_project_key --server clm_public_ip
+  if [ `docker ps -qf name=cloudlens-agent | wc -l` -ge 1 ]; then touch /root/.cl-collector-installed; fi
+fi'
 ````
 
-2. Create VPC Firewall rules in `nas-sandbox-vpc` to permit VxLAN traffic to any target tagged as `cl-tool` from CloudLens Collectors (`cl-collector`)
+2. Create VPC Firewall rules in `nas-sandbox-vpc` to permit CloudLens ingress traffic to any target tagged as `cl-tool` from CloudLens Collectors (`cl-collector`)
 
 ```Shell
 gcloud compute --project=kt-nas-demo firewall-rules create nas-sandbox-allow-vxlan --description="Allow VxLAN ingress to any instance tagged as cl-tool" --direction=INGRESS --priority=1000 --network=nas-sandbox-vpc --action=ALLOW --rules=udp:4789 --source-tags=cl-collector --target-tags=cl-tool
+gcloud compute --project=kt-nas-demo firewall-rules create nas-sandbox-allow-zerotier --description="Allow ZeroTier ingress to any instance tagged as cl-tool" --direction=INGRESS --priority=1000 --network=nas-sandbox-vpc --action=ALLOW --rules=udp:19993 --source-tags=cl-collector --target-tags=cl-tool
 ```
-
-2. Record a private IP of the `cl-tool-1-vxlan` instance, which would be refered as `vxlan_destination_ip` further in this document
-
-```Shell
-export vxlan_destination_ip=`gcloud compute instances describe cl-tool-1-vxlan --format='get(networkInterfaces[0].networkIP)'`; echo $vxlan_destination_ip
-````
 
 ## Create CloudLens Monitoring Policy
 
-1. Using CloudLens Web UI, for the project we created, define a static destination with an IP address `vxlan_destination_ip` and name `cl-tool-1-vxlan`
-2. Define a group with network tag `cl-tool-1-vxlan` as `Monitoring Tool`, of type Tool
+1. Using CloudLens Web UI, define a group with system hostname `cl-tool-1` as `Monitoring Tool`, of type Tool
 3. Define a group with network tags `http-server,https-server,ts-agent` as `ThreatSim Agents`, of type Instance Group
-4. Create a connection from `ThreatSim Agents` to `Monitoring Tool` with packet type `RAW`, encapsulation `VXLAN` and VNI `100`
+4. Create a connection from `ThreatSim Agents` to `Monitoring Tool` with packet type `RAW`, encapsulation `Encrypted tunnel`
 
 ## Cloud IDS Endpoint Deployment
 
@@ -355,17 +364,13 @@ Click “Create”: This creates the IDS endpoint and this step could take 10-15
 | Allow specific IP ranges						| 192.168.221.0/24
 
 
-This setup didn't work with Cloud IDS - no threats were detected.
+3. Create firewall rules to permit mirrored traffic
 
 
-3. Attach a Packet Mirroring policy to the IDS endpoint that will mirror traffic from 3rd party tool and send it to the IDS endpoint.
+#TODO how to determine FR IP
+Egress from source instances. Use an IP address assiged as a Frontend Internal IP in the previous step as `--destination-ranges`.
 
-| Parameter 									| Value
-| ---											| ---
-| Name											| `nas-sandbox-tool-mirror`
-| Region										| us-central1
-| Policy enforcement							| Enabled
-| Mirrored source - Select with network tags	| `cl-tool`
-| Select mirrored traffic						| Mirror all traffic
+```Shell
+gcloud compute --project=kt-nas-demo firewall-rules create packet-mirror-egress-to-cloud-ids --description="Packet mirroring egress from any instance to Cloud IDS" --direction=EGRESS --priority=1000 --network=nas-sandbox-vpc --action=ALLOW --rules=all
+```
 
-This setup didnt't work with Cloud IDS - no threats were detected.
