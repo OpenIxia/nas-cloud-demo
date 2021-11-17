@@ -15,6 +15,7 @@ locals {
 	UserLoginTag = var.UserLoginTag
 	ProjectTag = var.ProjectTag
 	RegionTag = upper(replace(local.Region, "-", "_"))
+	CLMInstanceType = var.CLMInstanceType
 	InboundIPv4CidrBlock = var.InboundIPv4CidrBlock
 	VPC_CIDR_BLOCK = "10.0.0.0/16"
 	VPC_INSTANCE_TENANCY = "default"
@@ -27,6 +28,12 @@ locals {
 	PRIVATE1_SUBNET_CIDR_BLOCK = "10.0.2.0/24"
 	PRIVATE2_SUBNET_CIDR_BLOCK = "10.0.3.0/24"
 	EKS_CLUSTER_VERSION = "1.18"
+	INTERFACE_SOURCE_DEST_CHECK = false
+	INSTANCE_DISABLE_API_TERMINATION = false
+	INSTANCE_MONITORING = false
+	INSTANCE_INSTANCE_INITIATED_SHUTDOWN_BEHAVIOR = "stop"
+	INSTANCE_EBS_DELETE_ON_TERMINATION = true
+	INSTANCE_EBS_VOLUME_TYPE = "gp2"
 	APP_TAG = "K8S"
 }
 
@@ -601,3 +608,49 @@ resource "aws_eks_fargate_profile" "aws_eks_fargate_profile1" {
 		aws_eks_cluster.EksCluster
 	]
 }
+
+resource "aws_placement_group" "PlacementGroup" {
+	name = "${local.UserLoginTag}_${local.ProjectTag}_PLACEMENT_GROUP_${local.uuid}_${local.RegionTag}"
+	strategy = local.PLACEMENT_GROUP_STRATEGY
+}
+
+resource "aws_network_interface" "CLMEth0" {
+	description = "${local.UserLoginTag}_${local.ProjectTag}_CLM_ETH0_${local.RegionTag}"
+	source_dest_check = local.INTERFACE_SOURCE_DEST_CHECK
+	subnet_id = aws_subnet.Public1Subnet.id
+	security_groups = [
+		aws_security_group.Public1SecurityGroup.id
+	]
+	tags = {
+		Name = "${local.UserLoginTag}_${local.ProjectTag}_CLM_ETH0_${local.RegionTag}"
+		Owner = local.UserEmailTag
+		Project = local.ProjectTag
+	}
+}
+
+resource "aws_instance" "CloudLensManager" {
+	disable_api_termination = local.INSTANCE_DISABLE_API_TERMINATION
+	instance_initiated_shutdown_behavior = local.INSTANCE_INSTANCE_INITIATED_SHUTDOWN_BEHAVIOR
+	ami = "ami-09f39ec70d8c33910"
+	instance_type = local.CLMInstanceType
+	monitoring = local.INSTANCE_MONITORING
+	tags = {
+		Name = "${local.UserLoginTag}_${local.ProjectTag}_CLM_${local.RegionTag}"
+		Owner = local.UserEmailTag
+		Project = local.ProjectTag
+	}
+	network_interface {
+		network_interface_id = aws_network_interface.CLMEth0.id
+		device_index = "0"
+	}
+	root_block_device {
+		delete_on_termination = local.INSTANCE_EBS_DELETE_ON_TERMINATION
+		volume_type = local.INSTANCE_EBS_VOLUME_TYPE
+	}
+	timeouts {
+		create = "9m"
+		delete = "5m"
+	}
+}
+
+

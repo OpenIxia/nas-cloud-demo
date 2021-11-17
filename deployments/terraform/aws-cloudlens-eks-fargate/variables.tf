@@ -60,3 +60,13 @@ variable "InboundIPv4CidrBlock" {
 		error_message = "InboundIPv4CidrBlock must be a valid IP CIDR range of the form x.x.x.x/x."
 	}
 }
+
+variable "CLMInstanceType" {
+	type = string
+	description = "Instance type of CloudLens Manager VM"
+	validation {
+		condition = can(regex("t2.xlarge", var.CLMInstanceType))
+		error_message = "CLMInstanceType must be one of (t2.xlarge) types."
+	}
+}
+

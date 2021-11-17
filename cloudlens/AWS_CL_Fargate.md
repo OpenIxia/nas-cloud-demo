@@ -1,4 +1,4 @@
-# AWS Fargate K8s Cluster Traffic Visibility
+# Traffic Visibility for AWS EKS Fargate Cluster using Keysight CloudLens
 
 ## Overview
 
@@ -22,7 +22,7 @@ cd deployments/terraform/aws-cloudlens-eks-fargate
 cp terraform.tfvars_template terraform.tfvars
 ````
 
-Edit `terraform.tfvars` to define AWS Region and other parameters for your environment. Please keep `ProjectTag` and `UserLoginTag` around 8 symbols to avoid running into AWS limitations for length on object names. The playbook would create objects with names derived from these parameters as follows:
+Edit `terraform.tfvars` to specify an AWS Region and other parameters for your environment. Please keep `ProjectTag` and `UserLoginTag` around 8 symbols to avoid running into AWS limitations for length on object names. The playbook would create objects with names derived from these parameters as follows:
 
 * VPC: `<UserLoginTag>_<ProjectTag>_VPC_<RegionTag>`,
 * EKS Fargate Cluster: `<UserLoginTag>_<ProjectTag>_K8S_EKS_CLUSTER_<RegionTag>`,
@@ -49,3 +49,6 @@ terraform plan
 ```Shell
 terraform apply
 ````
+
+## Deploy CloudLens Manager on a EC2 instance
+
