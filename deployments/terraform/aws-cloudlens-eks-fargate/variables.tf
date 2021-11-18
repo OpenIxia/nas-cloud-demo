@@ -70,3 +70,7 @@ variable "CLMInstanceType" {
 	}
 }
 
+variable "CLMAmiId" {
+	type = string
+}
+

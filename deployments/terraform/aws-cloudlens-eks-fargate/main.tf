@@ -631,7 +631,7 @@ resource "aws_network_interface" "CLMEth0" {
 resource "aws_instance" "CloudLensManager" {
 	disable_api_termination = local.INSTANCE_DISABLE_API_TERMINATION
 	instance_initiated_shutdown_behavior = local.INSTANCE_INSTANCE_INITIATED_SHUTDOWN_BEHAVIOR
-	ami = "ami-09f39ec70d8c33910"
+	ami = local.CLMAmiId
 	instance_type = local.CLMInstanceType
 	monitoring = local.INSTANCE_MONITORING
 	tags = {

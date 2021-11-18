@@ -28,7 +28,7 @@ Edit `terraform.tfvars` to specify an AWS Region and other parameters for your e
 * EKS Fargate Cluster: `<UserLoginTag>_<ProjectTag>_K8S_EKS_CLUSTER_<RegionTag>`,
 * and so on.
 
-Make sure to replace `1.1.1.1/32` with an IP address block you'll be accessing your deployment from in `InboundIPv4CidrBlock = "1.1.1.1/32"`.
+Make sure to replace `1.1.1.1/32` with an IP address block you'll be accessing your deployment from in `InboundIPv4CidrBlock = "1.1.1.1/32"`. For CloudLens Manager instance, please search AWS Community AMIs in the region of your choice for "CloudLens-6" and use an AMI ID with the latest version. Replace `CLMAmiId` with that ID.
 
 ## Create EKS Fargate cluster
 
