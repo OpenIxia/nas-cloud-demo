@@ -30,7 +30,7 @@ Edit `terraform.tfvars` to specify an AWS Region and other parameters for your e
 
 Make sure to replace `1.1.1.1/32` with an IP address block you'll be accessing your deployment from in `InboundIPv4CidrBlock = "1.1.1.1/32"`. For CloudLens Manager instance, please search AWS Community AMIs in the region of your choice for "CloudLens-6" and use an AMI ID with the latest version. Replace `CLMAmiId` with that ID.
 
-## Create EKS Fargate cluster
+## Deploy EKS Fargate cluster and CloudLens Manager EC2 instance
 
 1. Initialize Terraform for your deployment
 
@@ -50,5 +50,5 @@ terraform plan
 terraform apply
 ````
 
-## Deploy CloudLens Manager on a EC2 instance
+
 

@@ -16,6 +16,7 @@ locals {
 	ProjectTag = var.ProjectTag
 	RegionTag = upper(replace(local.Region, "-", "_"))
 	CLMInstanceType = var.CLMInstanceType
+	CLMAmiId = var.CLMAmiId
 	InboundIPv4CidrBlock = var.InboundIPv4CidrBlock
 	VPC_CIDR_BLOCK = "10.0.0.0/16"
 	VPC_INSTANCE_TENANCY = "default"
