@@ -68,10 +68,12 @@ terraform apply \
 -var gcp_credential_file="${gcp_credential_file}"
 ````
 
-5. Connect to a `public_ip` IP address of `mdw_detail` output and accept CyPerf EULA. Login with
+5. Connect to a `public_ip` IP address of `mdw_detail` output and accept CyPerf EULA. 
 
-  * Username: admin
-  * Password: CyPerf&Keysight#1
+  Login with
+
+    Username: admin
+    Password: CyPerf&Keysight#1
 
 6. Activate CyPerf license "Gear button" > Administration > License Manager
 
@@ -104,8 +106,8 @@ clm_public_ip=`gcloud compute instances describe cl-manager-use1-vmdk --zone=us-
 
   The default credentials for the CloudLens admin account are as follows. After first login you will be asked to change the password.
 
-    * Username admin
-    * Password Cl0udLens@dm!n
+    Username: admin
+    Password: Cl0udLens@dm!n
 
 6. In CloudLens Manager admin UI, section "Remote Access URL", change private IP address to `clm_public_ip` or corresponding DNS entry.
 
