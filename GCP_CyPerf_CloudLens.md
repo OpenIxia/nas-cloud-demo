@@ -84,7 +84,7 @@ gcloud compute instances create cl-manager-use1-vmdk \
 4. Record a public IP of the CloudLens Manager instance, which would be refered as `clm_public_ip` further in this document
 
 ```Shell
-export clm_public_ip=`gcloud compute instances describe cl-manager-use1-vmdk --zone=us-east1-b --format='get(networkInterfaces[0].accessConfigs[0].natIP)'`; echo $clm_public_ip
+clm_public_ip=`gcloud compute instances describe cl-manager-use1-vmdk --zone=us-east1-b --format='get(networkInterfaces[0].accessConfigs[0].natIP)'`; echo $clm_public_ip
 ````
 
 5. To access CloudLens Manager, open a web browser and enter `https://clm_public_ip` in the URL field. It may take up some time for CloudLens Manager Web UI to initialize
@@ -141,7 +141,7 @@ EOF
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - 
   add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu \$(lsb_release -cs) stable\"
   apt-get update -y
-  apt-get install docker-ce docker-ce-cli containerd.io -y
+  apt-get install docker-ce docker-ce-cli containerd.io iftop -y
   docker run -v /var/log:/var/log/cloudlens -v /:/host -v /var/run/docker.sock:/var/run/docker.sock -v /lib/modules:/lib/modules --privileged --name cloudlens-agent -d --restart=on-failure --net=host --log-opt max-size=50m --log-opt max-file=3 $clm_public_ip/sensor --accept_eula yes --runmode collector --ssl_verify no --project_key $cloudlens_project_key --server $clm_public_ip
   if [ \`docker ps -qf name=cloudlens-agent | wc -l\` -ge 1 ]; then touch /root/.cl-collector-installed; fi
 fi"
@@ -171,7 +171,7 @@ EOF
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - 
   add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu \$(lsb_release -cs) stable\"
   apt-get update -y
-  apt-get install docker-ce docker-ce-cli containerd.io -y
+  apt-get install docker-ce docker-ce-cli containerd.io iftop -y
   docker run -v /var/log:/var/log/cloudlens -v /:/host -v /var/run/docker.sock:/var/run/docker.sock -v /lib/modules:/lib/modules --privileged --name cloudlens-agent -d --restart=on-failure --net=host --log-opt max-size=50m --log-opt max-file=3 $clm_public_ip/sensor --accept_eula yes --runmode collector --ssl_verify no --project_key $cloudlens_project_key --server $clm_public_ip
   if [ \`docker ps -qf name=cloudlens-agent | wc -l\` -ge 1 ]; then touch /root/.cl-collector-installed; fi
 fi"
@@ -234,7 +234,7 @@ if [ ! -f /root/.cl-tool-installed ]; then
   apt install ./apt-ntop-stable.deb
   apt-get clean all
   apt-get update
-  apt-get install ntopng -y
+  apt-get install ntopng iftop -y
   mkdir -p /etc/ntopng
   cat > /etc/ntopng/ntopng.conf << EOF
 -e=
@@ -263,7 +263,7 @@ if [ ! -f /root/.cl-tool-installed ]; then
   apt install ./apt-ntop-stable.deb
   apt-get clean all
   apt-get update
-  apt-get install ntopng -y
+  apt-get install ntopng iftop -y
   mkdir -p /etc/ntopng
   cat > /etc/ntopng/ntopng.conf << EOF
 -e=
