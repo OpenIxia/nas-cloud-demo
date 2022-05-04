@@ -1,12 +1,25 @@
 # CloudLens Demo on Google Cloud with Keysight CyPerf
 
+## Overview
+
+This sandbox is targeting traffic monitoring scenario in Google Cloud when more than one network traffic sensor needs to see the same packets. At the moment of writing, Google Cloud Packet Mirroring service does not support packet replication to multiple 3rd party sensors. Although such cases are not supported by Google Cloud natively, it becomes possible to implement them via Keysight CloudLens - a distributed cloud packet broker. As with physical network packet brokers, CloudLens is capable of aggregating monitored cloud traffic via its collectors, and then feeding it to multiple traffic sensors, for analysis and detection.
+
+The goals of the sandbox are:
+
+* Validate capability of CloudLens to replicate traffic from Google Packet Mirroring service to multiple traffic sensors.
+* Provide a blueprint for CloudLens deployment in Google Cloud.
+
+The source of traffic to be mirrored in this demo is coming from Keysight CyPerf workloads – a cloud-native, elastic application and security traffic generator.
+
 ## Prerequisites
 
-1. CyPerf activation code (license)
+1. Keysight CyPerf activation code (license) for at least 2 agents and 1 Gbps throughput
 
-2. A Google account with Google Cloud access
+2. Keysight CloudLens activation code (license) for at least 3 instances
 
-3. Install [Google Cloud SDK](https://cloud.google.com/sdk/docs) and authenticate via
+3. A Google account with Google Cloud access
+
+4. Install [Google Cloud SDK](https://cloud.google.com/sdk/docs) and authenticate via
 
 ```Shell
 gcloud init
