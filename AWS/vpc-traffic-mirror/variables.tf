@@ -31,12 +31,3 @@ variable "aws_profile" {
   type    = string
   default = "default"
 }
-
-variable "vpc_cidr" {
-  type    = string
-  default = ""
-  validation {
-    condition     = length(var.vpc_cidr) > 1
-    error_message = "Please provide VPC CIDR to use via: terraform apply -var=\"vpc_cidr=<CIDR>\"."
-  }
-}

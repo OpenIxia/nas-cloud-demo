@@ -16,7 +16,6 @@ git clone https://github.com/OpenIxia/nas-cloud-demo.git
 ```Shell
 export PROJECT="nas-demo-mirror"
 export OWNER="your_email"
-export CIDR="192.168.128.0/18"
 export AWS_DEFAULT_REGION="us-west-1"
 ```
 
@@ -40,11 +39,11 @@ terraform init
 
 ```Shell
 terraform workspace new ${PROJECT}
-terraform plan -var="project_name=${PROJECT}" -var="project_owner=${OWNER}" -var="aws_region=${AWS_DEFAULT_REGION}" -var="vpc_cidr=${CIDR}" -var="aws_profile=${AWS_PROFILE}"
+terraform plan -var="project_name=${PROJECT}" -var="project_owner=${OWNER}" -var="aws_region=${AWS_DEFAULT_REGION}" -var="aws_profile=${AWS_PROFILE}"
 ```
 
 3. Apply the changes
 
 ```Shell
-terraform apply -var="project_name=${PROJECT}" -var="project_owner=${OWNER}" -var="aws_region=${AWS_DEFAULT_REGION}" -var="vpc_cidr=${CIDR}" -var="aws_profile=${AWS_PROFILE}"
+terraform apply -var="project_name=${PROJECT}" -var="project_owner=${OWNER}" -var="aws_region=${AWS_DEFAULT_REGION}" -var="aws_profile=${AWS_PROFILE}"
 ```
