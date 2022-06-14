@@ -39,3 +39,19 @@ resource "aws_subnet" "apps_public" {
     Owner = var.project_owner
   }
 }
+
+resource "aws_internet_gateway" "apps_igw" {
+  vpc_id = aws_vpc.apps.id
+
+  tags = {
+    Name = "${var.project_name}.apps_igw"
+    Project = var.project_name
+    Owner = var.project_owner
+  }
+}
+
+resource "aws_route" "apps_default" {
+  route_table_id            = aws_vpc.apps.main_route_table_id
+  destination_cidr_block    = "0.0.0.0/0"
+  gateway_id                = aws_internet_gateway.apps_igw.id
+}
