@@ -31,3 +31,12 @@ variable "aws_profile" {
   type    = string
   default = "default"
 }
+
+variable "mgmt_cidr" {
+  type    = string
+  default = ""
+  validation {
+    condition     = length(var.mgmt_cidr) > 1
+    error_message = "Please provide source IP block for management access to use via: terraform apply -var=\"mgmt_cidr=<cidr>\"."
+  }
+}

@@ -17,6 +17,7 @@ git clone https://github.com/OpenIxia/nas-cloud-demo.git
 export PROJECT="nas-demo-mirror"
 export OWNER="your_email"
 export AWS_DEFAULT_REGION="us-west-1"
+export MGMT_CIDR="`curl ifconfig.me`/32"
 ```
 
 3. Initialize AWS authentication. Either use env variables below, or store credentials in `$HOME/.aws/credentials` under profile name `profile_name` and use `export AWS_PROFILE=profile_name`
@@ -39,11 +40,11 @@ terraform init
 
 ```Shell
 terraform workspace new ${PROJECT}
-terraform plan -var="project_name=${PROJECT}" -var="project_owner=${OWNER}" -var="aws_region=${AWS_DEFAULT_REGION}" -var="aws_profile=${AWS_PROFILE}"
+terraform plan -var="project_name=${PROJECT}" -var="project_owner=${OWNER}" -var="aws_region=${AWS_DEFAULT_REGION}" -var="aws_profile=${AWS_PROFILE}" -var="mgmt_cidr=${MGMT_CIDR}"
 ```
 
 3. Apply the changes
 
 ```Shell
-terraform apply -var="project_name=${PROJECT}" -var="project_owner=${OWNER}" -var="aws_region=${AWS_DEFAULT_REGION}" -var="aws_profile=${AWS_PROFILE}"
+terraform apply -var="project_name=${PROJECT}" -var="project_owner=${OWNER}" -var="aws_region=${AWS_DEFAULT_REGION}" -var="aws_profile=${AWS_PROFILE}" -var="mgmt_cidr=${MGMT_CIDR}"
 ```

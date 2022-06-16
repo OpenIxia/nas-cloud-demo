@@ -55,3 +55,32 @@ resource "aws_route" "apps_default" {
   destination_cidr_block    = "0.0.0.0/0"
   gateway_id                = aws_internet_gateway.apps_igw.id
 }
+
+resource "aws_security_group" "apps_base" {
+  name        = "${var.project_name}.apps_base"
+  description = "Base access ruless"
+  vpc_id      = aws_vpc.apps.id
+
+  ingress {
+    description      = "SSH Access"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["${var.mgmt_cidr}"]
+  }
+
+  egress {
+    description      = "Outbound traffic"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "${var.project_name}.apps_mgmt"
+    Project = var.project_name
+    Owner = var.project_owner
+  }
+}
