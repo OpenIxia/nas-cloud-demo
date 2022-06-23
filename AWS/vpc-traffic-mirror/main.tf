@@ -30,8 +30,9 @@ resource "aws_vpc" "apps" {
 }
 
 resource "aws_subnet" "apps_public" {
-  vpc_id     = aws_vpc.apps.id
-  cidr_block = "192.168.128.0/24"
+  vpc_id                  = aws_vpc.apps.id
+  cidr_block              = "192.168.128.0/24"
+  map_public_ip_on_launch = true
 
   tags = {
     Name = "${var.project_name}.apps_public"
@@ -80,6 +81,49 @@ resource "aws_security_group" "apps_base" {
 
   tags = {
     Name = "${var.project_name}.apps_mgmt"
+    Project = var.project_name
+    Owner = var.project_owner
+  }
+}
+
+
+
+
+######################################################################
+# Create an EC2 instance "app" using Ubuntu 20.04LTS
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
+}
+
+data "aws_key_pair" "ssh_key" {
+  filter {
+    name   = "tag:Owner"
+    values = ["${var.project_owner}"]
+  }
+}
+
+resource "aws_instance" "app" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.micro"
+  subnet_id     = aws_subnet.apps_public.id
+  key_name      = data.aws_key_pair.ssh_key.key_name
+  vpc_security_group_ids = [aws_security_group.apps_base.id]
+
+  tags = {
+    Name = "${var.project_name}.app"
     Project = var.project_name
     Owner = var.project_owner
   }
