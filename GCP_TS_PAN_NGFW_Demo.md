@@ -1,4 +1,4 @@
-# Keysight Threat Simulator Demo with Palo Alto Networks Next Gen Firewall on GCP
+# Google Cloud Network Security Demo - Palo Alto Networks Firewall
 
 ## Overview
 
