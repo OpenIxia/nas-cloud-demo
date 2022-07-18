@@ -1,8 +1,8 @@
-# GCP Cloud Security Monitoring Demo
+# Google Cloud Palo Alto IDS Demo with Keysight Threat Simulator
 
 ## Overview
 
-The demo is targeting a passive network monitoring security tool deployment, operating in [Google Compute Cloud (GCP)](https://cloud.google.com/) environment. It is assumed the tool should be receiving network traffic via [GCP Packet Mirroring](https://cloud.google.com/vpc/docs/packet-mirroring) service. Throughout the demo, a breach and attack simulation software [Keysight Threat Simulator](https://www.keysight.com/us/en/products/network-security/breach-defense/threat-simulator.html) is used to create conditions resembling real malicious activities. The goals of the demo are:
+This is a demo of Palo Alto Networks firewall acting in a passive IDS mode in [Google Compute Cloud (GCP)](https://cloud.google.com/) environment. It is assumed the IDS should be receiving network traffic via [GCP Packet Mirroring](https://cloud.google.com/vpc/docs/packet-mirroring) service. Throughout the demo, a breach and attack simulation software [Keysight Threat Simulator](https://www.keysight.com/us/en/products/network-security/breach-defense/threat-simulator.html) is used to create conditions resembling real malicious activities. The goals of the demo are:
 
 * Validate operational readiness and basic efficacy of a network security monitoring tool.
 * Compare efficacy of [various tools](https://cloud.google.com/vpc/docs/packet-mirroring-partners) against identical attack scenarios -- as more tools are added to the demo.
