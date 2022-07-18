@@ -1,4 +1,4 @@
-# Google Cloud Palo Alto IDS Demo with Keysight Threat Simulator
+# Google Cloud Security Monitoring Demo - Palo Alto Networks Firewall as an IDS
 
 ## Overview
 
