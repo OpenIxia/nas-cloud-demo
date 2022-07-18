@@ -10,7 +10,7 @@ A collection of cloud-based demonstrations of Keysight Technologies' Network, Ap
 
 ## CloudLens
 
-* [CloudLens Demo of traffic replication to multiple tools on Google Cloud with Keysight CyPerf](GCP_CyPerf_CloudLens.md)
+* [Google Cloud Traffic Replication to Multiple Tools with Keysight CloudLens](GCP_CyPerf_CloudLens.md)
 
 # Copyright notice
 
