@@ -1,4 +1,4 @@
-# Google Cloud Security Monitoring Demo - Palo Alto Networks Firewall as an IDS
+# Google Cloud Security Monitoring Demo - Palo Alto Networks IDS
 
 ## Overview
 
