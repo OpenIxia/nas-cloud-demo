@@ -1,4 +1,4 @@
-# GCP Cloud IDS Demo with Keysight Threat Simulator
+# Google Cloud IDS Demo with Keysight Threat Simulator
 
 ## Overview
 
